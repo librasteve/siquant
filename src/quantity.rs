@@ -205,6 +205,11 @@ impl QuantityType {
         u16::try_from(self.index).expect("fewer than 65536 quantity types")
     }
 
+    /// Where the type belongs in a menu: see [`crate::Group`].
+    pub fn group(&self) -> crate::Group {
+        self.reg.0.types[self.index].group
+    }
+
     /// The name, as a column declares it.
     pub fn name(&self) -> &str {
         &self.reg.0.types[self.index].name

@@ -52,6 +52,28 @@ pub enum Prefixable {
     Both,
 }
 
+/// Where a unit or a quantity type belongs in a menu: the seven SI base
+/// units and what they measure, the named SI derived ones, and the rest.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum Group {
+    Base,
+    Derived,
+    #[default]
+    Other,
+}
+
+impl Group {
+    /// A heading for a menu.
+    pub fn title(self) -> &'static str {
+        match self {
+            Group::Base => "SI base",
+            Group::Derived => "SI derived",
+            Group::Other => "Other",
+        }
+    }
+}
+
 /// Whether a prefix is a power of ten or of two.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum PrefixKind {
@@ -113,6 +135,7 @@ pub(crate) struct TypeDef {
     pub name: String,
     pub dims: Dim,
     pub unit: Option<Vec<Term>>,
+    pub group: Group,
 }
 
 #[derive(Default)]
@@ -165,6 +188,8 @@ struct TypeRow {
     name: String,
     dims: BTreeMap<String, i8>,
     unit: Option<String>,
+    #[serde(default)]
+    group: Group,
 }
 
 fn resource<T>(what: &str, e: impl fmt::Display) -> Result<T> {
@@ -438,6 +463,7 @@ impl Inner {
             name: row.name,
             dims,
             unit,
+            group: row.group,
         });
         Ok(())
     }
@@ -468,6 +494,9 @@ pub struct UnitInfo<'a> {
     pub dims: Dim,
     pub prefixable: Prefixable,
     pub live: bool,
+    /// Base for a base unit, Derived for a named unit of the SI that is
+    /// defined over them, Other for the rest (`°C`).
+    pub group: Group,
 }
 
 /// What a caller may know of one prefix.
@@ -570,6 +599,13 @@ impl Registry {
                 dims: u.dims,
                 prefixable: u.prefixable,
                 live: u.live,
+                group: if u.is_base {
+                    Group::Base
+                } else if u.offset != 0.0 || !u.live {
+                    Group::Other
+                } else {
+                    Group::Derived
+                },
             })
     }
 

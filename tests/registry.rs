@@ -367,3 +367,24 @@ fn a_scale_is_a_base_and_an_exponent() {
         assert!(close(unit.factor(), want), "{text}");
     }
 }
+
+#[test]
+fn types_and_units_are_grouped_for_menus() {
+    use siquant::{Group, Registry};
+    let reg = Registry::builtin();
+    let group = |n: &str| reg.quantity_type(n).unwrap().group();
+    assert_eq!(group("Mass"), Group::Base);
+    assert_eq!(group("Force"), Group::Derived);
+    assert_eq!(group("Speed"), Group::Other);
+    let units = |g: Group| reg.units().filter(|u| u.group == g).count();
+    assert_eq!(units(Group::Base), 7);
+    assert!(units(Group::Derived) >= 15);
+    assert_eq!(units(Group::Other), 1); // °C
+    // Every base dimension has exactly one base type, but time.
+    assert_eq!(
+        reg.quantity_types()
+            .filter(|t| t.group() == Group::Base)
+            .count(),
+        6
+    );
+}
