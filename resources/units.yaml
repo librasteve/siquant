@@ -49,5 +49,5 @@
 - {symbol: Bq,  name: becquerel, defn: "s^-1",                prefixable: si, group: Radiation}
 - {symbol: Gy,  name: gray,      defn: "m^2.s^-2",            prefixable: si, group: Radiation}
 - {symbol: Sv,  name: sievert,   defn: "m^2.s^-2",            prefixable: si, group: Radiation}
-- {symbol: kat, name: katal,     defn: "mol.s^-1",            prefixable: si}
+- {symbol: kat, name: katal,     defn: "mol.s^-1",            prefixable: si, group: Thermodynamic}
 

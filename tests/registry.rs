@@ -409,3 +409,10 @@ fn types_and_units_are_grouped_for_menus() {
         6
     );
 }
+
+#[test]
+fn the_katal_is_filed_under_thermodynamic() {
+    let reg = siquant::Registry::builtin();
+    let kat = reg.units().find(|u| u.symbol == "kat").unwrap();
+    assert_eq!(kat.group, "Thermodynamic");
+}
