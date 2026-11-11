@@ -58,5 +58,5 @@
 - {name: CatalyticActivity, dims: {Amount: 1, Time: -1},   unit: kat, group: Thermodynamic}
 
 - {name: Information, dims: {Data: 1},             unit: B, group: Data}
-- {name: DataRate,    dims: {Data: 1, Time: -1},   unit: "B.s^-1", group: Data}
+- {name: DataRate,    dims: {Data: 1, Time: -1},   unit: "b.s^-1", group: Data}
 - {name: InformationDensity, dims: {Data: 1, Length: -2}, unit: "b.m^-2", group: Data}

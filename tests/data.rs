@@ -100,7 +100,7 @@ fn the_data_types() {
     assert_eq!(info.group(), "Data");
     let rate = reg.quantity_type("DataRate").unwrap();
     assert!(rate.admits(&u("MiB.s^-1")));
-    assert_eq!(rate.preferred_unit().unwrap().to_string(), "B.s^-1");
+    assert_eq!(rate.preferred_unit().unwrap().to_string(), "b.s^-1");
 }
 
 #[test]
