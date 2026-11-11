@@ -525,6 +525,29 @@ impl Registry {
         Some(QuantityType::new(self.clone(), index))
     }
 
+    /// The quantity type with this id (see [`QuantityType::id`]).
+    pub fn quantity_type_by_id(&self, id: u16) -> Option<QuantityType> {
+        let index = usize::from(id);
+        (index < self.0.types.len()).then(|| QuantityType::new(self.clone(), index))
+    }
+
+    /// Every quantity type, in the order of the resource file, for menus
+    /// and help.
+    pub fn quantity_types(&self) -> impl Iterator<Item = QuantityType> + '_ {
+        (0..self.0.types.len()).map(|i| QuantityType::new(self.clone(), i))
+    }
+
+    /// A bare prefix and a `.`, `k.`, as the power it stands for: the base
+    /// (10, or 2 for a binary prefix) and the exponent, so `k.` is `(10, 3)`.
+    /// A host that reads `1k.` as the number 1000 uses this to shift an exact
+    /// decimal. `None` if the text is not a prefix and a trailing `.`.
+    pub fn scale(&self, text: &str) -> Option<(u8, i16)> {
+        let body = text.strip_suffix('.')?;
+        let p = self.0.prefix_by_symbol.get(body)?;
+        let def = self.0.prefix_def(*p);
+        Some((def.base, def.exp))
+    }
+
     /// Every quantity type with exactly this dimension, to suggest a column
     /// type; never used to infer one.
     pub fn quantity_types_for(&self, dims: Dim) -> Vec<QuantityType> {

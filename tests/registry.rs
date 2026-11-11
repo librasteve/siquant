@@ -325,3 +325,45 @@ mod bad_resources {
         assert!(message(r).contains("different dimension"));
     }
 }
+
+#[test]
+fn quantity_types_have_stable_ids() {
+    let reg = Registry::builtin();
+    let all: Vec<_> = reg.quantity_types().collect();
+    assert!(all.len() >= 40);
+    for (i, t) in all.iter().enumerate() {
+        assert_eq!(usize::from(t.id()), i);
+        assert_eq!(reg.quantity_type_by_id(t.id()).unwrap(), *t);
+        assert_eq!(reg.quantity_type(t.name()).unwrap(), *t);
+    }
+    assert!(reg.quantity_type_by_id(u16::MAX).is_none());
+    // Names are unique.
+    let mut names: Vec<_> = all.iter().map(|t| t.name().to_string()).collect();
+    names.sort();
+    names.dedup();
+    assert_eq!(names.len(), all.len());
+}
+
+#[test]
+fn a_scale_is_a_base_and_an_exponent() {
+    let reg = Registry::builtin();
+    assert_eq!(reg.scale("k."), Some((10, 3)));
+    assert_eq!(reg.scale("M."), Some((10, 6)));
+    assert_eq!(reg.scale("m."), Some((10, -3)));
+    assert_eq!(reg.scale("T."), Some((10, 12)));
+    assert_eq!(reg.scale("da."), Some((10, 1)));
+    assert_eq!(reg.scale("μ."), Some((10, -6)));
+    assert_eq!(reg.scale("\u{b5}."), Some((10, -6)));
+    assert_eq!(reg.scale("q."), Some((10, -30)));
+    for not in ["k", "kg.", "k..", ".", "", "m", "x.", "k.m", "Ki."] {
+        assert_eq!(reg.scale(not), None, "{not}");
+    }
+    // It agrees with the unit a scale parses to.
+    for p in reg.prefixes() {
+        let text = format!("{}.", p.symbol);
+        assert_eq!(reg.scale(&text), Some((p.base, p.exp)), "{text}");
+        let unit = reg.parse_unit(&text, Scope::Live).unwrap();
+        let want: f64 = format!("1e{}", p.exp).parse().unwrap();
+        assert!(close(unit.factor(), want), "{text}");
+    }
+}
