@@ -51,3 +51,8 @@
 - {symbol: Sv,  name: sievert,   defn: "m^2.s^-2",            prefixable: si, group: Radiation}
 - {symbol: kat, name: katal,     defn: "mol.s^-1",            prefixable: si, group: Thermodynamic}
 
+# Data (Stage 2). The bit is the base unit of data and the byte is eight of
+# them. Both take the SI prefixes (`kB` is 1000 B) and the binary ones (`KiB` is
+# 1024 B); rates need no entry of their own: `kb.s^-1`, `MiB.s^-1`.
+- {symbol: b, name: bit,  base: Data, prefixable: both, group: Data}
+- {symbol: B, name: byte, defn: b, factor: "8", prefixable: both, group: Data}

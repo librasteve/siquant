@@ -16,9 +16,11 @@ fn close(a: f64, b: f64) -> bool {
 #[test]
 fn the_builtin_registry_loads_and_is_unambiguous() {
     let reg = Registry::builtin();
-    assert_eq!(reg.prefixes().count(), 24);
+    assert_eq!(reg.prefixes().count(), 34);
     assert!(reg.units().count() >= 25);
     assert!(reg.units().all(|u| u.live));
+    // The bit and the byte are there, with the data prefixes.
+    assert!(reg.units().any(|u| u.symbol == "B"));
 }
 
 #[test]
@@ -46,11 +48,15 @@ fn every_prefix_and_unit_reads_back_as_itself() {
                 .unwrap_or_else(|e| panic!("`{text}` should parse: {e}"));
             assert_eq!(unit.to_string(), text, "`{text}` prints as itself");
             assert_eq!(unit.dims(), u.dims, "`{text}` keeps the dimension");
-            // One of it, in the bare unit, is 10^exp of the bare unit, except
-            // that the bare mass unit `g` is a thousandth of a kilogram.
+            // One of it, in the bare unit, is base^exp of the bare unit (10^exp
+            // for an SI prefix, 2^exp for a binary one).
             let bare = Unit::parse(u.symbol, Scope::Live).unwrap();
             let ratio = unit.convert_value(1.0, &bare).unwrap();
-            let want: f64 = format!("1e{}", p.exp).parse().unwrap();
+            let want: f64 = if p.base == 2 {
+                2f64.powi(i32::from(p.exp))
+            } else {
+                format!("1e{}", p.exp).parse().unwrap()
+            };
             assert!(
                 close(ratio, want),
                 "`{text}` -> `{}`: {ratio} vs {want}",
@@ -59,7 +65,11 @@ fn every_prefix_and_unit_reads_back_as_itself() {
             checked += 1;
         }
     }
-    assert!(checked >= 24 * 24, "only {checked} combinations checked");
+    // 24 SI prefixes on each SI unit, and the binary ones too on the data units.
+    assert!(
+        checked >= 24 * 24 + 34 * 2,
+        "only {checked} combinations checked"
+    );
 }
 
 #[test]
@@ -355,7 +365,9 @@ fn a_scale_is_a_base_and_an_exponent() {
     assert_eq!(reg.scale("μ."), Some((10, -6)));
     assert_eq!(reg.scale("\u{b5}."), Some((10, -6)));
     assert_eq!(reg.scale("q."), Some((10, -30)));
-    for not in ["k", "kg.", "k..", ".", "", "m", "x.", "k.m", "Ki."] {
+    assert_eq!(reg.scale("Ki."), Some((2, 10)));
+    assert_eq!(reg.scale("Gi."), Some((2, 30)));
+    for not in ["k", "kg.", "k..", ".", "", "m", "x.", "k.m"] {
         assert_eq!(reg.scale(not), None, "{not}");
     }
     // It agrees with the unit a scale parses to.
@@ -363,7 +375,11 @@ fn a_scale_is_a_base_and_an_exponent() {
         let text = format!("{}.", p.symbol);
         assert_eq!(reg.scale(&text), Some((p.base, p.exp)), "{text}");
         let unit = reg.parse_unit(&text, Scope::Live).unwrap();
-        let want: f64 = format!("1e{}", p.exp).parse().unwrap();
+        let want: f64 = if p.base == 2 {
+            2f64.powi(i32::from(p.exp))
+        } else {
+            format!("1e{}", p.exp).parse().unwrap()
+        };
         assert!(close(unit.factor(), want), "{text}");
     }
 }

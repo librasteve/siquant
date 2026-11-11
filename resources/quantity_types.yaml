@@ -8,8 +8,7 @@
 # `group` is the heading a menu files the type under: SI Base, Dimensional,
 # Mechanical, Electromagnetic, Thermodynamic, Radiation or Other (the default).
 #
-# Types for angles, data and time arrive with the stages that add those
-# dimensions.
+# Types for angles and time arrive with the stages that add those dimensions.
 
 - {name: Dimensionless,     dims: {}, group: Other}
 
@@ -57,3 +56,6 @@
 - {name: ThermalConductance, dims: {Mass: 1, Length: 2, Time: -3, Temperature: -1}, unit: "W.K^-1", group: Thermodynamic}
 - {name: ThermalResistance, dims: {Mass: -1, Length: -2, Time: 3, Temperature: 1}, unit: "K.W^-1", group: Thermodynamic}
 - {name: CatalyticActivity, dims: {Amount: 1, Time: -1},   unit: kat, group: Thermodynamic}
+
+- {name: Information, dims: {Data: 1},             unit: B, group: Data}
+- {name: DataRate,    dims: {Data: 1, Time: -1},   unit: "B.s^-1", group: Data}

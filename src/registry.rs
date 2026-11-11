@@ -55,13 +55,14 @@ pub enum Prefixable {
 /// The headings a menu files units and quantity types under, in order. A
 /// resource file names one of them in its `group` field; the default is the
 /// last.
-pub const GROUPS: [&str; 7] = [
+pub const GROUPS: [&str; 8] = [
     "SI Base",
     "Dimensional",
     "Mechanical",
     "Electromagnetic",
     "Thermodynamic",
     "Radiation",
+    "Data",
     "Other",
 ];
 

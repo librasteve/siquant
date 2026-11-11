@@ -2,7 +2,8 @@
 # exponent, never from a long literal. `alt` lists typographic alternates that
 # parse the same (the canonical symbol is the one printed).
 #
-# Stage 2 adds the binary prefixes here as `base: 2`.
+# The binary prefixes, `base: 2`, are for data units (`b`, `B`) alone: they
+# are the IEC ones, in capitals with an `i`, so `kB` is 1000 B and `KiB` 1024 B.
 
 - {symbol: Q,  name: quetta, base: 10, exp: 30}
 - {symbol: R,  name: ronna,  base: 10, exp: 27}
@@ -28,3 +29,14 @@
 - {symbol: y,  name: yocto,  base: 10, exp: -24}
 - {symbol: r,  name: ronto,  base: 10, exp: -27}
 - {symbol: q,  name: quecto, base: 10, exp: -30}
+
+- {symbol: Ki, name: kibi, base: 2, exp: 10}
+- {symbol: Mi, name: mebi, base: 2, exp: 20}
+- {symbol: Gi, name: gibi, base: 2, exp: 30}
+- {symbol: Ti, name: tebi, base: 2, exp: 40}
+- {symbol: Pi, name: pebi, base: 2, exp: 50}
+- {symbol: Ei, name: exbi, base: 2, exp: 60}
+- {symbol: Zi, name: zebi, base: 2, exp: 70}
+- {symbol: Yi, name: yobi, base: 2, exp: 80}
+- {symbol: Ri, name: robi, base: 2, exp: 90}
+- {symbol: Qi, name: quebi, base: 2, exp: 100}

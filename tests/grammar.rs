@@ -89,7 +89,6 @@ fn rejects_everything_else() {
         ("m.k.", "a scale in a compound"),
         ("k.^2", "an exponent on a scale"),
         ("k^2.", "an exponent on a scale"),
-        ("Ki.", "binary prefix, not until Stage 2"),
         ("x.", "not a prefix"),
         ("m*s", "star"),
         ("m\u{b7}s", "middle dot"),
