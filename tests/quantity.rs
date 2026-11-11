@@ -352,3 +352,25 @@ fn the_unity_unit_is_not_listed() {
     let reg = siquant::Registry::builtin();
     assert!(reg.units().all(|u| !u.symbol.is_empty()));
 }
+
+#[test]
+fn a_conversion_has_no_rounding_noise() {
+    assert_q(
+        &q(2.0, 0.0, "g").convert(&u("mg")).unwrap(),
+        2000.0,
+        0.0,
+        "mg",
+    );
+    assert_q(
+        &q(5.0, 0.1, "kg").convert(&u("g")).unwrap(),
+        5000.0,
+        100.0,
+        "g",
+    );
+    assert_q(
+        &q(0.3, 0.0, "m").convert(&u("cm")).unwrap(),
+        30.0,
+        0.0,
+        "cm",
+    );
+}

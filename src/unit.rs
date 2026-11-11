@@ -183,7 +183,9 @@ impl Unit {
                 right: to.dims,
             });
         }
-        Ok((value + self.offset) * self.factor / to.factor - to.offset)
+        Ok(tidy(
+            (value + self.offset) * self.factor / to.factor - to.offset,
+        ))
     }
 
     /// How many `to` units one of this unit's size is, for a spread.
@@ -194,8 +196,17 @@ impl Unit {
                 right: to.dims,
             });
         }
-        Ok(self.factor / to.factor)
+        Ok(tidy(self.factor / to.factor))
     }
+}
+
+/// A converted number to the 15 significant digits a float holds for sure,
+/// so that `2g` in `mg` is `2000` and not `2000.0000000000002`.
+fn tidy(x: f64) -> f64 {
+    if x == 0.0 || !x.is_finite() {
+        return x;
+    }
+    format!("{x:.14e}").parse().unwrap_or(x)
 }
 
 impl PartialEq for Unit {
