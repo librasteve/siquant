@@ -374,8 +374,8 @@ fn types_and_units_are_grouped_for_menus() {
     let reg = Registry::builtin();
     let group = |n: &str| reg.quantity_type(n).unwrap().group().to_string();
     assert_eq!(group("Mass"), "SI Base");
-    assert_eq!(group("Area"), "Dimensions");
-    assert_eq!(group("Force"), "Mechanics");
+    assert_eq!(group("Area"), "Dimensional");
+    assert_eq!(group("Force"), "Mechanical");
     assert_eq!(group("Resistance"), "Electromagnetic");
     assert_eq!(group("SpecificHeat"), "Thermodynamic");
     assert_eq!(group("Dose"), "Radiation");
@@ -388,10 +388,16 @@ fn types_and_units_are_grouped_for_menus() {
             .to_string()
     };
     // The gram is not an SI base unit: the kilogram is, which is `Mass`'s.
-    assert_eq!(unit("g"), "Other");
+    assert_eq!(unit("g"), "Dimensional");
     assert_eq!(unit("m"), "SI Base");
-    assert_eq!(unit("N"), "Mechanics");
-    assert_eq!(unit("°C"), "Thermodynamic");
+    assert_eq!(unit("N"), "Mechanical");
+    assert_eq!(unit("°C"), "Dimensional");
+    let order: Vec<&str> = reg
+        .units()
+        .filter(|u| u.group == "Dimensional")
+        .map(|u| u.symbol)
+        .collect();
+    assert_eq!(order, ["g", "°C", "Hz"]);
     // Every group named is one of the headings.
     assert!(reg.quantity_types().all(|t| GROUPS.contains(&t.group())));
     assert!(reg.units().all(|u| GROUPS.contains(&u.group)));

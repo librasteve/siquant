@@ -5,8 +5,8 @@
 # dimension at run time, the column's declared type decides.
 #
 # `unit` is an optional preferred display unit, in cell-text notation.
-# `group` is the heading a menu files the type under: SI Base, Dimensions,
-# Mechanics, Electromagnetic, Thermodynamic, Radiation or Other (the default).
+# `group` is the heading a menu files the type under: SI Base, Dimensional,
+# Mechanical, Electromagnetic, Thermodynamic, Radiation or Other (the default).
 #
 # Types for angles, data and time arrive with the stages that add those
 # dimensions.
@@ -20,25 +20,25 @@
 - {name: AmountOfSubstance, dims: {Amount: 1},             unit: mol, group: SI Base}
 - {name: LuminousIntensity, dims: {LuminousIntensity: 1},  unit: cd, group: SI Base}
 
-- {name: Area,              dims: {Length: 2},             unit: "m^2", group: Dimensions}
-- {name: Volume,            dims: {Length: 3},             unit: "m^3", group: Dimensions}
-- {name: Speed,             dims: {Length: 1, Time: -1},   unit: "m.s^-1", group: Dimensions}
-- {name: Acceleration,      dims: {Length: 1, Time: -2},   unit: "m.s^-2", group: Dimensions}
-- {name: Flow,              dims: {Length: 3, Time: -1},   unit: "m^3.s^-1", group: Dimensions}
-- {name: Frequency,         dims: {Time: -1},              unit: Hz, group: Dimensions}
+- {name: Area,              dims: {Length: 2},             unit: "m^2", group: Dimensional}
+- {name: Volume,            dims: {Length: 3},             unit: "m^3", group: Dimensional}
+- {name: Speed,             dims: {Length: 1, Time: -1},   unit: "m.s^-1", group: Dimensional}
+- {name: Acceleration,      dims: {Length: 1, Time: -2},   unit: "m.s^-2", group: Dimensional}
+- {name: Flow,              dims: {Length: 3, Time: -1},   unit: "m^3.s^-1", group: Dimensional}
+- {name: Frequency,         dims: {Time: -1},              unit: Hz, group: Dimensional}
 - {name: Radioactivity,     dims: {Time: -1},              unit: Bq, group: Radiation}
-- {name: Density,           dims: {Mass: 1, Length: -3},   unit: "kg.m^-3", group: Mechanics}
-- {name: ArealDensity,      dims: {Mass: 1, Length: -2},   unit: "kg.m^-2", group: Mechanics}
-- {name: Momentum,          dims: {Mass: 1, Length: 1, Time: -1}, unit: "kg.m.s^-1", group: Mechanics}
-- {name: Impulse,           dims: {Mass: 1, Length: 1, Time: -1}, unit: "N.s", group: Mechanics}
-- {name: MomentOfInertia,   dims: {Mass: 1, Length: 2},    unit: "kg.m^2", group: Mechanics}
-- {name: AngularMomentum,   dims: {Mass: 1, Length: 2, Time: -1}, unit: "kg.m^2.s^-1", group: Mechanics}
+- {name: Density,           dims: {Mass: 1, Length: -3},   unit: "kg.m^-3", group: Mechanical}
+- {name: ArealDensity,      dims: {Mass: 1, Length: -2},   unit: "kg.m^-2", group: Mechanical}
+- {name: Momentum,          dims: {Mass: 1, Length: 1, Time: -1}, unit: "kg.m.s^-1", group: Mechanical}
+- {name: Impulse,           dims: {Mass: 1, Length: 1, Time: -1}, unit: "N.s", group: Mechanical}
+- {name: MomentOfInertia,   dims: {Mass: 1, Length: 2},    unit: "kg.m^2", group: Mechanical}
+- {name: AngularMomentum,   dims: {Mass: 1, Length: 2, Time: -1}, unit: "kg.m^2.s^-1", group: Mechanical}
 
-- {name: Force,             dims: {Mass: 1, Length: 1, Time: -2},  unit: N, group: Mechanics}
-- {name: Pressure,          dims: {Mass: 1, Length: -1, Time: -2}, unit: Pa, group: Mechanics}
-- {name: Energy,            dims: {Mass: 1, Length: 2, Time: -2},  unit: J, group: Mechanics}
-- {name: Torque,            dims: {Mass: 1, Length: 2, Time: -2},  unit: "N.m", group: Mechanics}
-- {name: Power,             dims: {Mass: 1, Length: 2, Time: -3},  unit: W, group: Mechanics}
+- {name: Force,             dims: {Mass: 1, Length: 1, Time: -2},  unit: N, group: Mechanical}
+- {name: Pressure,          dims: {Mass: 1, Length: -1, Time: -2}, unit: Pa, group: Mechanical}
+- {name: Energy,            dims: {Mass: 1, Length: 2, Time: -2},  unit: J, group: Mechanical}
+- {name: Torque,            dims: {Mass: 1, Length: 2, Time: -2},  unit: "N.m", group: Mechanical}
+- {name: Power,             dims: {Mass: 1, Length: 2, Time: -3},  unit: W, group: Mechanical}
 - {name: Irradiance,        dims: {Mass: 1, Time: -3},             unit: "W.m^-2", group: Radiation}
 
 - {name: Charge,            dims: {Current: 1, Time: 1},                              unit: C, group: Electromagnetic}
