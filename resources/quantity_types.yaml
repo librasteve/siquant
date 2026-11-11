@@ -5,56 +5,55 @@
 # dimension at run time, the column's declared type decides.
 #
 # `unit` is an optional preferred display unit, in cell-text notation.
-# `group` (base, derived or other; default other) is where a menu files it:
-# what an SI base unit measures, what a named SI derived unit measures, and
-# the rest (compounds such as Speed, named for what they are).
+# `group` is the heading a menu files the type under: SI Base, Dimensions,
+# Mechanics, Electromagnetic, Thermodynamic, Radiation or Other (the default).
 #
 # Types for angles, data and time arrive with the stages that add those
 # dimensions.
 
-- {name: Dimensionless,     dims: {}, group: other}
+- {name: Dimensionless,     dims: {}, group: Other}
 
-- {name: Length,            dims: {Length: 1},             unit: m, group: base}
-- {name: Mass,              dims: {Mass: 1},               unit: kg, group: base}
-- {name: Current,           dims: {Current: 1},            unit: A, group: base}
-- {name: Temperature,       dims: {Temperature: 1},        unit: K, group: base}
-- {name: AmountOfSubstance, dims: {Amount: 1},             unit: mol, group: base}
-- {name: LuminousIntensity, dims: {LuminousIntensity: 1},  unit: cd, group: base}
+- {name: Length,            dims: {Length: 1},             unit: m, group: SI Base}
+- {name: Mass,              dims: {Mass: 1},               unit: kg, group: SI Base}
+- {name: Current,           dims: {Current: 1},            unit: A, group: SI Base}
+- {name: Temperature,       dims: {Temperature: 1},        unit: K, group: SI Base}
+- {name: AmountOfSubstance, dims: {Amount: 1},             unit: mol, group: SI Base}
+- {name: LuminousIntensity, dims: {LuminousIntensity: 1},  unit: cd, group: SI Base}
 
-- {name: Area,              dims: {Length: 2},             unit: "m^2", group: other}
-- {name: Volume,            dims: {Length: 3},             unit: "m^3", group: other}
-- {name: Speed,             dims: {Length: 1, Time: -1},   unit: "m.s^-1", group: other}
-- {name: Acceleration,      dims: {Length: 1, Time: -2},   unit: "m.s^-2", group: other}
-- {name: Flow,              dims: {Length: 3, Time: -1},   unit: "m^3.s^-1", group: other}
-- {name: Frequency,         dims: {Time: -1},              unit: Hz, group: derived}
-- {name: Radioactivity,     dims: {Time: -1},              unit: Bq, group: derived}
-- {name: Density,           dims: {Mass: 1, Length: -3},   unit: "kg.m^-3", group: other}
-- {name: ArealDensity,      dims: {Mass: 1, Length: -2},   unit: "kg.m^-2", group: other}
-- {name: Momentum,          dims: {Mass: 1, Length: 1, Time: -1}, unit: "kg.m.s^-1", group: other}
-- {name: Impulse,           dims: {Mass: 1, Length: 1, Time: -1}, unit: "N.s", group: other}
-- {name: MomentOfInertia,   dims: {Mass: 1, Length: 2},    unit: "kg.m^2", group: other}
-- {name: AngularMomentum,   dims: {Mass: 1, Length: 2, Time: -1}, unit: "kg.m^2.s^-1", group: other}
+- {name: Area,              dims: {Length: 2},             unit: "m^2", group: Dimensions}
+- {name: Volume,            dims: {Length: 3},             unit: "m^3", group: Dimensions}
+- {name: Speed,             dims: {Length: 1, Time: -1},   unit: "m.s^-1", group: Dimensions}
+- {name: Acceleration,      dims: {Length: 1, Time: -2},   unit: "m.s^-2", group: Dimensions}
+- {name: Flow,              dims: {Length: 3, Time: -1},   unit: "m^3.s^-1", group: Dimensions}
+- {name: Frequency,         dims: {Time: -1},              unit: Hz, group: Dimensions}
+- {name: Radioactivity,     dims: {Time: -1},              unit: Bq, group: Radiation}
+- {name: Density,           dims: {Mass: 1, Length: -3},   unit: "kg.m^-3", group: Mechanics}
+- {name: ArealDensity,      dims: {Mass: 1, Length: -2},   unit: "kg.m^-2", group: Mechanics}
+- {name: Momentum,          dims: {Mass: 1, Length: 1, Time: -1}, unit: "kg.m.s^-1", group: Mechanics}
+- {name: Impulse,           dims: {Mass: 1, Length: 1, Time: -1}, unit: "N.s", group: Mechanics}
+- {name: MomentOfInertia,   dims: {Mass: 1, Length: 2},    unit: "kg.m^2", group: Mechanics}
+- {name: AngularMomentum,   dims: {Mass: 1, Length: 2, Time: -1}, unit: "kg.m^2.s^-1", group: Mechanics}
 
-- {name: Force,             dims: {Mass: 1, Length: 1, Time: -2},  unit: N, group: derived}
-- {name: Pressure,          dims: {Mass: 1, Length: -1, Time: -2}, unit: Pa, group: derived}
-- {name: Energy,            dims: {Mass: 1, Length: 2, Time: -2},  unit: J, group: derived}
-- {name: Torque,            dims: {Mass: 1, Length: 2, Time: -2},  unit: "N.m", group: other}
-- {name: Power,             dims: {Mass: 1, Length: 2, Time: -3},  unit: W, group: derived}
-- {name: Irradiance,        dims: {Mass: 1, Time: -3},             unit: "W.m^-2", group: other}
+- {name: Force,             dims: {Mass: 1, Length: 1, Time: -2},  unit: N, group: Mechanics}
+- {name: Pressure,          dims: {Mass: 1, Length: -1, Time: -2}, unit: Pa, group: Mechanics}
+- {name: Energy,            dims: {Mass: 1, Length: 2, Time: -2},  unit: J, group: Mechanics}
+- {name: Torque,            dims: {Mass: 1, Length: 2, Time: -2},  unit: "N.m", group: Mechanics}
+- {name: Power,             dims: {Mass: 1, Length: 2, Time: -3},  unit: W, group: Mechanics}
+- {name: Irradiance,        dims: {Mass: 1, Time: -3},             unit: "W.m^-2", group: Radiation}
 
-- {name: Charge,            dims: {Current: 1, Time: 1},                              unit: C, group: derived}
-- {name: Potential,         dims: {Mass: 1, Length: 2, Time: -3, Current: -1},        unit: V, group: derived}
-- {name: Resistance,        dims: {Mass: 1, Length: 2, Time: -3, Current: -2},        unit: Ω, group: derived}
-- {name: Conductance,       dims: {Mass: -1, Length: -2, Time: 3, Current: 2},        unit: S, group: derived}
-- {name: Capacitance,       dims: {Mass: -1, Length: -2, Time: 4, Current: 2},        unit: F, group: derived}
-- {name: Inductance,        dims: {Mass: 1, Length: 2, Time: -2, Current: -2},        unit: H, group: derived}
-- {name: MagneticField,     dims: {Mass: 1, Time: -2, Current: -1},                   unit: T, group: derived}
-- {name: MagneticFlux,      dims: {Mass: 1, Length: 2, Time: -2, Current: -1},        unit: Wb, group: derived}
+- {name: Charge,            dims: {Current: 1, Time: 1},                              unit: C, group: Electromagnetic}
+- {name: Potential,         dims: {Mass: 1, Length: 2, Time: -3, Current: -1},        unit: V, group: Electromagnetic}
+- {name: Resistance,        dims: {Mass: 1, Length: 2, Time: -3, Current: -2},        unit: Ω, group: Electromagnetic}
+- {name: Conductance,       dims: {Mass: -1, Length: -2, Time: 3, Current: 2},        unit: S, group: Electromagnetic}
+- {name: Capacitance,       dims: {Mass: -1, Length: -2, Time: 4, Current: 2},        unit: F, group: Electromagnetic}
+- {name: Inductance,        dims: {Mass: 1, Length: 2, Time: -2, Current: -2},        unit: H, group: Electromagnetic}
+- {name: MagneticField,     dims: {Mass: 1, Time: -2, Current: -1},                   unit: T, group: Electromagnetic}
+- {name: MagneticFlux,      dims: {Mass: 1, Length: 2, Time: -2, Current: -1},        unit: Wb, group: Electromagnetic}
 
-- {name: Dose,              dims: {Length: 2, Time: -2},   unit: Gy, group: derived}
-- {name: SpecificEnergy,    dims: {Length: 2, Time: -2},   unit: "J.kg^-1", group: other}
-- {name: SpecificPower,     dims: {Length: 2, Time: -3},   unit: "W.kg^-1", group: other}
-- {name: SpecificHeat,      dims: {Length: 2, Time: -2, Temperature: -1}, unit: "J.kg^-1.K^-1", group: other}
-- {name: ThermalConductance, dims: {Mass: 1, Length: 2, Time: -3, Temperature: -1}, unit: "W.K^-1", group: other}
-- {name: ThermalResistance, dims: {Mass: -1, Length: -2, Time: 3, Temperature: 1}, unit: "K.W^-1", group: other}
-- {name: CatalyticActivity, dims: {Amount: 1, Time: -1},   unit: kat, group: derived}
+- {name: Dose,              dims: {Length: 2, Time: -2},   unit: Gy, group: Radiation}
+- {name: SpecificEnergy,    dims: {Length: 2, Time: -2},   unit: "J.kg^-1", group: Thermodynamic}
+- {name: SpecificPower,     dims: {Length: 2, Time: -3},   unit: "W.kg^-1", group: Thermodynamic}
+- {name: SpecificHeat,      dims: {Length: 2, Time: -2, Temperature: -1}, unit: "J.kg^-1.K^-1", group: Thermodynamic}
+- {name: ThermalConductance, dims: {Mass: 1, Length: 2, Time: -3, Temperature: -1}, unit: "W.K^-1", group: Thermodynamic}
+- {name: ThermalResistance, dims: {Mass: -1, Length: -2, Time: 3, Temperature: 1}, unit: "K.W^-1", group: Thermodynamic}
+- {name: CatalyticActivity, dims: {Amount: 1, Time: -1},   unit: kat, group: Other}

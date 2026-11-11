@@ -20,7 +20,7 @@
 # so `kg` is just `k` + `g` with no special case.
 
 # SI base units.
-- {symbol: g,   name: gram,     base: Mass,              factor: "0.001", prefixable: si}
+- {symbol: g,   name: gram,     base: Mass,              factor: "0.001", prefixable: si, group: Other}
 - {symbol: m,   name: metre,    base: Length,            prefixable: si}
 - {symbol: A,   name: ampere,   base: Current,           prefixable: si}
 - {symbol: K,   name: kelvin,   base: Temperature,       prefixable: si}
@@ -29,24 +29,24 @@
 - {symbol: s,   name: second,   base: Time,              prefixable: si}
 
 # SI named derived units (those that need no angle; rad, sr, lm, lx are Stage 3).
-- {symbol: Hz,  name: hertz,     defn: "s^-1",                prefixable: si}
-- {symbol: N,   name: newton,    defn: "kg.m.s^-2",           prefixable: si}
-- {symbol: Pa,  name: pascal,    defn: "kg.m^-1.s^-2",        prefixable: si}
-- {symbol: J,   name: joule,     defn: "kg.m^2.s^-2",         prefixable: si}
-- {symbol: W,   name: watt,      defn: "kg.m^2.s^-3",         prefixable: si}
-- {symbol: C,   name: coulomb,   defn: "A.s",                 prefixable: si}
-- {symbol: V,   name: volt,      defn: "kg.m^2.A^-1.s^-3",    prefixable: si}
-- {symbol: F,   name: farad,     defn: "kg^-1.m^-2.A^2.s^4",  prefixable: si}
-- {symbol: Ω,   name: ohm,       defn: "kg.m^2.A^-2.s^-3",    prefixable: si, alt: ["Ω"]}
-- {symbol: S,   name: siemens,   defn: "kg^-1.m^-2.A^2.s^3",  prefixable: si}
-- {symbol: Wb,  name: weber,     defn: "kg.m^2.A^-1.s^-2",    prefixable: si}
-- {symbol: T,   name: tesla,     defn: "kg.A^-1.s^-2",        prefixable: si}
-- {symbol: H,   name: henry,     defn: "kg.m^2.A^-2.s^-2",    prefixable: si}
-- {symbol: Bq,  name: becquerel, defn: "s^-1",                prefixable: si}
-- {symbol: Gy,  name: gray,      defn: "m^2.s^-2",            prefixable: si}
-- {symbol: Sv,  name: sievert,   defn: "m^2.s^-2",            prefixable: si}
+- {symbol: Hz,  name: hertz,     defn: "s^-1",                prefixable: si, group: Dimensions}
+- {symbol: N,   name: newton,    defn: "kg.m.s^-2",           prefixable: si, group: Mechanics}
+- {symbol: Pa,  name: pascal,    defn: "kg.m^-1.s^-2",        prefixable: si, group: Mechanics}
+- {symbol: J,   name: joule,     defn: "kg.m^2.s^-2",         prefixable: si, group: Mechanics}
+- {symbol: W,   name: watt,      defn: "kg.m^2.s^-3",         prefixable: si, group: Mechanics}
+- {symbol: C,   name: coulomb,   defn: "A.s",                 prefixable: si, group: Electromagnetic}
+- {symbol: V,   name: volt,      defn: "kg.m^2.A^-1.s^-3",    prefixable: si, group: Electromagnetic}
+- {symbol: F,   name: farad,     defn: "kg^-1.m^-2.A^2.s^4",  prefixable: si, group: Electromagnetic}
+- {symbol: Ω,   name: ohm,       defn: "kg.m^2.A^-2.s^-3",    prefixable: si, alt: ["Ω"], group: Electromagnetic}
+- {symbol: S,   name: siemens,   defn: "kg^-1.m^-2.A^2.s^3",  prefixable: si, group: Electromagnetic}
+- {symbol: Wb,  name: weber,     defn: "kg.m^2.A^-1.s^-2",    prefixable: si, group: Electromagnetic}
+- {symbol: T,   name: tesla,     defn: "kg.A^-1.s^-2",        prefixable: si, group: Electromagnetic}
+- {symbol: H,   name: henry,     defn: "kg.m^2.A^-2.s^-2",    prefixable: si, group: Electromagnetic}
+- {symbol: Bq,  name: becquerel, defn: "s^-1",                prefixable: si, group: Radiation}
+- {symbol: Gy,  name: gray,      defn: "m^2.s^-2",            prefixable: si, group: Radiation}
+- {symbol: Sv,  name: sievert,   defn: "m^2.s^-2",            prefixable: si, group: Radiation}
 - {symbol: kat, name: katal,     defn: "mol.s^-1",            prefixable: si}
 
 # Celsius is affine: kelvin = (celsius + 273.15). Not prefixable, and legal
 # only on its own (never inside a compound unit).
-- {symbol: "°C", name: degree Celsius, defn: K, offset: "273.15", alt: ["ºC"]}
+- {symbol: "°C", name: degree Celsius, defn: K, offset: "273.15", alt: ["ºC"], group: Thermodynamic}

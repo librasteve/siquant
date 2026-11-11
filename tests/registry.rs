@@ -370,20 +370,35 @@ fn a_scale_is_a_base_and_an_exponent() {
 
 #[test]
 fn types_and_units_are_grouped_for_menus() {
-    use siquant::{Group, Registry};
+    use siquant::{GROUPS, Registry};
     let reg = Registry::builtin();
-    let group = |n: &str| reg.quantity_type(n).unwrap().group();
-    assert_eq!(group("Mass"), Group::Base);
-    assert_eq!(group("Force"), Group::Derived);
-    assert_eq!(group("Speed"), Group::Other);
-    let units = |g: Group| reg.units().filter(|u| u.group == g).count();
-    assert_eq!(units(Group::Base), 7);
-    assert!(units(Group::Derived) >= 15);
-    assert_eq!(units(Group::Other), 1); // °C
-    // Every base dimension has exactly one base type, but time.
+    let group = |n: &str| reg.quantity_type(n).unwrap().group().to_string();
+    assert_eq!(group("Mass"), "SI Base");
+    assert_eq!(group("Area"), "Dimensions");
+    assert_eq!(group("Force"), "Mechanics");
+    assert_eq!(group("Resistance"), "Electromagnetic");
+    assert_eq!(group("SpecificHeat"), "Thermodynamic");
+    assert_eq!(group("Dose"), "Radiation");
+    assert_eq!(group("Dimensionless"), "Other");
+    let unit = |s: &str| {
+        reg.units()
+            .find(|u| u.symbol == s)
+            .unwrap()
+            .group
+            .to_string()
+    };
+    // The gram is not an SI base unit: the kilogram is, which is `Mass`'s.
+    assert_eq!(unit("g"), "Other");
+    assert_eq!(unit("m"), "SI Base");
+    assert_eq!(unit("N"), "Mechanics");
+    assert_eq!(unit("°C"), "Thermodynamic");
+    // Every group named is one of the headings.
+    assert!(reg.quantity_types().all(|t| GROUPS.contains(&t.group())));
+    assert!(reg.units().all(|u| GROUPS.contains(&u.group)));
+    // The base types are the six with a base unit of their own here.
     assert_eq!(
         reg.quantity_types()
-            .filter(|t| t.group() == Group::Base)
+            .filter(|t| t.group() == "SI Base")
             .count(),
         6
     );

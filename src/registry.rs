@@ -52,25 +52,28 @@ pub enum Prefixable {
     Both,
 }
 
-/// Where a unit or a quantity type belongs in a menu: the seven SI base
-/// units and what they measure, the named SI derived ones, and the rest.
-#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Deserialize)]
-#[serde(rename_all = "lowercase")]
-pub enum Group {
-    Base,
-    Derived,
-    #[default]
-    Other,
-}
+/// The headings a menu files units and quantity types under, in order. A
+/// resource file names one of them in its `group` field; the default is the
+/// last.
+pub const GROUPS: [&str; 7] = [
+    "SI Base",
+    "Dimensions",
+    "Mechanics",
+    "Electromagnetic",
+    "Thermodynamic",
+    "Radiation",
+    "Other",
+];
 
-impl Group {
-    /// A heading for a menu.
-    pub fn title(self) -> &'static str {
-        match self {
-            Group::Base => "SI base",
-            Group::Derived => "SI derived",
-            Group::Other => "Other",
-        }
+fn group_of(what: &str, group: Option<&str>, default: &str) -> Result<String> {
+    let group = group.unwrap_or(default);
+    if GROUPS.contains(&group) {
+        Ok(group.to_string())
+    } else {
+        resource(
+            what,
+            format!("`{group}` is not a group: {}", GROUPS.join(", ")),
+        )
     }
 }
 
@@ -123,6 +126,8 @@ pub(crate) struct UnitDef {
     pub defn: Vec<Term>,
     /// Is it a base unit, one defined by a dimension and not by other units?
     pub is_base: bool,
+    /// The heading a menu files it under, one of [`GROUPS`].
+    pub group: String,
 }
 
 impl UnitDef {
@@ -135,7 +140,7 @@ pub(crate) struct TypeDef {
     pub name: String,
     pub dims: Dim,
     pub unit: Option<Vec<Term>>,
-    pub group: Group,
+    pub group: String,
 }
 
 #[derive(Default)]
@@ -176,6 +181,7 @@ struct UnitRow {
     prefixable: Prefixable,
     #[serde(default = "yes")]
     live: bool,
+    group: Option<String>,
 }
 
 fn yes() -> bool {
@@ -188,8 +194,7 @@ struct TypeRow {
     name: String,
     dims: BTreeMap<String, i8>,
     unit: Option<String>,
-    #[serde(default)]
-    group: Group,
+    group: Option<String>,
 }
 
 fn resource<T>(what: &str, e: impl fmt::Display) -> Result<T> {
@@ -246,6 +251,7 @@ impl Inner {
                 exp: 1,
             }],
             is_base: true,
+            group: "Other".to_string(),
         });
     }
 
@@ -402,6 +408,15 @@ impl Inner {
             live: row.live,
             defn,
             is_base: row.base.is_some(),
+            group: group_of(
+                &what,
+                row.group.as_deref(),
+                if row.base.is_some() {
+                    "SI Base"
+                } else {
+                    "Other"
+                },
+            )?,
         });
         Ok(())
     }
@@ -463,7 +478,7 @@ impl Inner {
             name: row.name,
             dims,
             unit,
-            group: row.group,
+            group: group_of(&what, row.group.as_deref(), "Other")?,
         });
         Ok(())
     }
@@ -494,9 +509,8 @@ pub struct UnitInfo<'a> {
     pub dims: Dim,
     pub prefixable: Prefixable,
     pub live: bool,
-    /// Base for a base unit, Derived for a named unit of the SI that is
-    /// defined over them, Other for the rest (`°C`).
-    pub group: Group,
+    /// The heading a menu files it under, one of [`GROUPS`].
+    pub group: &'a str,
 }
 
 /// What a caller may know of one prefix.
@@ -599,13 +613,7 @@ impl Registry {
                 dims: u.dims,
                 prefixable: u.prefixable,
                 live: u.live,
-                group: if u.is_base {
-                    Group::Base
-                } else if u.offset != 0.0 || !u.live {
-                    Group::Other
-                } else {
-                    Group::Derived
-                },
+                group: &u.group,
             })
     }
 
