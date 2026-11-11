@@ -91,7 +91,8 @@ impl Quantity {
         self.sum(other, 1.0)
     }
 
-    /// The difference, as [`Quantity::add`]: `20°C - 10°C` is `10K`.
+    /// The difference, as [`Quantity::add`]. Two temperatures differ by an
+    /// interval in the unit of the left: `20°C - 10°C` is `10°C`.
     pub fn sub(&self, other: &Quantity) -> Result<Quantity> {
         self.sum(other, -1.0)
     }
@@ -103,11 +104,30 @@ impl Quantity {
             (self.clone(), other.clone())
         };
         let b = b.convert(&a.unit)?;
-        Ok(Quantity {
+        let sum = Quantity {
             value: a.value + sign * b.value,
             sigma: a.sigma.hypot(b.sigma),
             unit: a.unit,
-        })
+        };
+        if self.unit.is_affine() {
+            if other.unit.is_affine() {
+                // Two temperatures differ by a temperature interval, which
+                // is as big in `°C` as in K: `10°C - 5°C` is `5°C`.
+                if sign < 0.0 {
+                    let f = self.unit.factor();
+                    return Ok(Quantity {
+                        value: sum.value / f,
+                        sigma: sum.sigma / f,
+                        unit: self.unit.clone(),
+                    });
+                }
+            } else {
+                // A temperature moved by an interval is a temperature in
+                // the unit it began in: `10°C + 5K` is `15°C`.
+                return sum.convert(&self.unit);
+            }
+        }
+        Ok(sum)
     }
 
     /// The product, in the product of the two units: `5km * 2s` is `10km.s`.

@@ -204,13 +204,22 @@ fn powers_and_roots() {
 }
 
 #[test]
-fn a_difference_of_celsius_temperatures_is_in_kelvin() {
+fn a_difference_of_celsius_temperatures_is_in_celsius() {
+    // An interval is as big in `°C` as in K, and keeps the left's unit.
     let d = q(20.0, 0.3, "°C").sub(&q(10.0, 0.4, "°C")).unwrap();
-    assert_q(&d, 10.0, 0.5, "K");
-    // A Celsius value plus a kelvin step.
+    assert_q(&d, 10.0, 0.5, "°C");
+    assert_q(
+        &q(10.0, 0.0, "°C").sub(&q(5.0, 0.0, "°C")).unwrap(),
+        5.0,
+        0.0,
+        "°C",
+    );
+    // A Celsius value moved by a kelvin step stays Celsius.
     let up = q(20.0, 0.0, "°C").add(&q(5.0, 0.0, "K")).unwrap();
-    assert_q(&up, 298.15, 0.0, "K");
-    // A product goes through kelvin as well.
+    assert_q(&up, 25.0, 0.0, "°C");
+    let down = q(20.0, 0.0, "°C").sub(&q(5.0, 0.0, "K")).unwrap();
+    assert_q(&down, 15.0, 0.0, "°C");
+    // A product goes through kelvin.
     let p = q(20.0, 0.0, "°C").mul(&q(2.0, 0.0, "m")).unwrap();
     assert_q(&p, 586.3, 0.0, "m.K");
 }
