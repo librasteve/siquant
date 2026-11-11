@@ -204,6 +204,8 @@ impl PartialEq for Unit {
     }
 }
 
+impl Eq for Unit {}
+
 impl fmt::Display for Unit {
     /// The notation the parser reads: `kg.m^2.s^-2`, or `1` for no terms.
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
