@@ -81,9 +81,26 @@ impl Unit {
         self.offset != 0.0
     }
 
-    /// Is this a pure number, with no terms?
+    /// Does this unit measure a pure number: no terms (`m.m^-1`, or
+    /// [`Unit::one`]) or a scale (`k.`)?
     pub fn is_dimensionless(&self) -> bool {
-        self.terms.is_empty()
+        self.dims.is_dimensionless()
+    }
+
+    /// Is this a scale, a bare prefix such as `k.` (1000)?
+    pub fn is_scale(&self) -> bool {
+        matches!(self.terms.as_slice(), [t] if t.unit == self.reg.0.unity)
+    }
+
+    /// The unit of a plain number: no terms, factor one.
+    pub fn one(reg: &Registry) -> Unit {
+        Unit {
+            reg: reg.clone(),
+            terms: Vec::new(),
+            dims: Dim::NONE,
+            factor: 1.0,
+            offset: 0.0,
+        }
     }
 
     /// The product of two units. Affine units have no product.
@@ -151,6 +168,8 @@ impl Unit {
             [t] if self.is_affine() => {
                 Unit::from_terms(&self.reg, self.reg.0.unit_def(t.unit).defn.clone())
             }
+            // A scale as the plain number it stands for (`k.` as 1000).
+            _ if self.is_scale() => Ok(Unit::one(&self.reg)),
             _ => Ok(self.clone()),
         }
     }
@@ -197,6 +216,11 @@ impl fmt::Display for Unit {
             }
             if let Some(p) = t.prefix {
                 f.write_str(&self.reg.0.prefix_def(p).symbol)?;
+            }
+            if t.unit == self.reg.0.unity {
+                // A scale: the prefix, then the `.` that makes it one.
+                f.write_str(".")?;
+                continue;
             }
             f.write_str(&self.reg.0.unit_def(t.unit).symbol)?;
             if t.exp != 1 {

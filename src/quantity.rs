@@ -66,10 +66,19 @@ impl Quantity {
         })
     }
 
+    /// A quantity as a plain number: its value and uncertainty with the
+    /// unit's size applied, so `1k.` is `(1000, 0)`. Only for a quantity
+    /// with no dimension.
+    pub fn to_number(&self) -> Result<(f64, f64)> {
+        let plain = self.convert(&Unit::one(self.unit.registry()))?;
+        Ok((plain.value, plain.sigma))
+    }
+
     /// An affine quantity in the unit it is defined over (`20°C` as
-    /// `293.15K`); any other quantity unchanged.
+    /// `293.15K`) and a scale as a plain number (`2k.` as `2000`); any
+    /// other quantity unchanged.
     pub fn rebase(&self) -> Result<Quantity> {
-        if self.unit.is_affine() {
+        if self.unit.is_affine() || self.unit.is_scale() {
             self.convert(&self.unit.rebased()?)
         } else {
             Ok(self.clone())

@@ -10,8 +10,9 @@
 //! ([`QuantityType`]).
 //!
 //! Cell text is deliberately strict: SI units only, written `kg.m^2.s^-2`
-//! (see [`Unit::parse`] and [`Scope::Live`]). The crate does not read the
-//! number in front of a unit; the host splits a cell into number and unit.
+//! (see [`Unit::parse`] and [`Scope::Live`]), plus a bare prefix and a `.`,
+//! `k.`, for a dimensionless scale (`1k.` is 1000). The crate does not read
+//! the number in front of a unit; the host splits a cell into number and unit.
 //!
 //! The staged plan is in `docs/plan.md`: this is Stage 1 (SI units and SI
 //! prefixes), with data prefixes, angles and durations to follow.

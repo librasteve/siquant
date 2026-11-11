@@ -8,6 +8,8 @@ Status: Stage 1 (SI units and SI prefixes) is implemented. Data prefixes, angles
 
 A cell holds a number followed directly by a unit: `5kg`, `300cm`, `9.81m.s^-2`, `5kg.m^2.s^-2`, `20°C`. SI units only, `.` between terms, `^` and a signed integer for an exponent, no spaces, no `/`. The crate reads the unit; the host splits the number off.
 
+A prefix and a trailing `.` on their own is a dimensionless scale: `1k.` is 1000, `5m.` is 0.005 (`Quantity::to_number()` applies it). The dot makes it a prefix and nothing else, so `m.` is milli and `T.` is tera, not the metre and the tesla. Note that a stray dot after `m` or `T` therefore reads as a scale rather than failing.
+
 ```rust
 use siquant::{Quantity, Scope, Unit};
 

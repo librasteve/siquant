@@ -25,7 +25,7 @@ const UNITS_YAML: &str = include_str!("../resources/units.yaml");
 const TYPES_YAML: &str = include_str!("../resources/quantity_types.yaml");
 
 /// Which unit a [`Term`] names: an index into the registry's unit table.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct UnitId(pub(crate) u32);
 
 /// Which prefix a [`Term`] has: an index into the registry's prefix table.
@@ -122,6 +122,9 @@ pub(crate) struct Inner {
     pub types: Vec<TypeDef>,
     pub unit_by_symbol: HashMap<String, UnitId>,
     pub prefix_by_symbol: HashMap<String, PrefixId>,
+    /// The dimensionless unit a bare prefix scales: `k.` is prefix `k` and
+    /// this. It has no symbol, so it is reached only by that form.
+    pub unity: UnitId,
 }
 
 #[derive(Deserialize)]
@@ -199,6 +202,28 @@ impl Inner {
         &self.prefixes[id.0 as usize]
     }
 
+    /// Makes `unity`, which must be the first unit (id 0).
+    fn add_unity(&mut self) {
+        let id = UnitId(self.units.len() as u32);
+        self.unity = id;
+        self.units.push(UnitDef {
+            symbol: String::new(),
+            name: "unity".to_string(),
+            alts: Vec::new(),
+            dims: Dim::NONE,
+            factor: 1.0,
+            offset: 0.0,
+            prefixable: Prefixable::None,
+            live: true,
+            defn: vec![Term {
+                prefix: None,
+                unit: id,
+                exp: 1,
+            }],
+            is_base: true,
+        });
+    }
+
     /// The size of one term in the coherent unit: (prefix x unit) ^ exponent.
     pub(crate) fn term_factor(&self, t: &Term) -> f64 {
         let scale = t.prefix.map_or(1.0, |p| self.prefix_def(p).scale);
@@ -241,6 +266,15 @@ impl Inner {
             return Err(Error::AffineInCompound(
                 self.unit_def(t.unit).symbol.clone(),
             ));
+        }
+        // A scale (`k.`) is a whole unit too: `k.m` would be unreadable.
+        if let Some(t) = terms
+            .iter()
+            .find(|t| t.unit == self.unity)
+            .filter(|t| terms.len() != 1 || t.exp != 1 || t.prefix.is_none())
+        {
+            let prefix = t.prefix.map_or("", |p| self.prefix_def(p).symbol.as_str());
+            return Err(Error::ScaleInCompound(format!("{prefix}.")));
         }
         let mut out: Vec<Term> = Vec::with_capacity(terms.len());
         for t in terms {
@@ -465,6 +499,7 @@ impl Registry {
         let type_rows: Vec<TypeRow> =
             serde_yaml_ng::from_str(types).or_else(|e| resource("quantity_types.yaml", e))?;
         let mut inner = Inner::default();
+        inner.add_unity();
         for row in prefix_rows {
             inner.add_prefix(row)?;
         }
@@ -499,15 +534,20 @@ impl Registry {
             .collect()
     }
 
-    /// Every unit, in the order of the resource file.
+    /// Every unit, in the order of the resource file. (Not the unity that a
+    /// bare prefix scales; it has no symbol.)
     pub fn units(&self) -> impl Iterator<Item = UnitInfo<'_>> {
-        self.0.units.iter().map(|u| UnitInfo {
-            symbol: &u.symbol,
-            name: &u.name,
-            dims: u.dims,
-            prefixable: u.prefixable,
-            live: u.live,
-        })
+        self.0
+            .units
+            .iter()
+            .filter(|u| !u.symbol.is_empty())
+            .map(|u| UnitInfo {
+                symbol: &u.symbol,
+                name: &u.name,
+                dims: u.dims,
+                prefixable: u.prefixable,
+                live: u.live,
+            })
     }
 
     /// Every prefix, in the order of the resource file.

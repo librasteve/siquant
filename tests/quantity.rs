@@ -253,3 +253,93 @@ fn a_quantity_is_its_types_dimension() {
     assert!(!area.admits_quantity(&side));
     assert!(area.admits_quantity(&side.mul(&side).unwrap()));
 }
+
+fn one() -> Unit {
+    Unit::one(siquant::Registry::builtin())
+}
+
+#[test]
+fn a_scale_is_a_plain_number() {
+    // 1k. == 1000, and the uncertainty is scaled with it.
+    assert_eq!(q(1.0, 0.0, "k.").to_number().unwrap(), (1000.0, 0.0));
+    let (v, s) = q(2.0, 0.1, "k.").to_number().unwrap();
+    assert!(close(v, 2000.0) && close(s, 100.0), "{v} {s}");
+    let (v, _) = q(5.0, 0.0, "m.").to_number().unwrap();
+    assert!(close(v, 0.005));
+    let (v, _) = q(1.0, 0.0, "T.").to_number().unwrap();
+    assert!(close(v, 1e12));
+    let (v, _) = q(1.0, 0.0, "da.").to_number().unwrap();
+    assert!(close(v, 10.0));
+    // A plain number and a quantity with no unit terms are the same thing.
+    assert_eq!(Quantity::exact(7.0, one()).to_number().unwrap(), (7.0, 0.0));
+    let ratio = q(6.0, 0.0, "m").div(&q(3.0, 0.0, "m")).unwrap();
+    assert_eq!(ratio.to_number().unwrap(), (2.0, 0.0));
+}
+
+#[test]
+fn only_a_dimensionless_quantity_is_a_number() {
+    let e = q(1.0, 0.0, "m").to_number().unwrap_err();
+    assert!(matches!(e, Error::DimensionMismatch { .. }), "{e}");
+    assert!(q(1.0, 0.0, "kg").to_number().is_err());
+}
+
+#[test]
+fn a_scale_adds_to_a_number_and_to_another_scale() {
+    // 5k. + 300 is 5.3k.; the left unit wins.
+    let sum = q(5.0, 0.0, "k.")
+        .add(&Quantity::exact(300.0, one()))
+        .unwrap();
+    assert_q(&sum, 5.3, 0.0, "k.");
+    assert!(close(sum.to_number().unwrap().0, 5300.0));
+    // 1M. + 500k. is 1.5M.
+    let sum = q(1.0, 0.0, "M.").add(&q(500.0, 0.0, "k.")).unwrap();
+    assert_q(&sum, 1.5, 0.0, "M.");
+    // A scale is not a length.
+    assert!(matches!(
+        q(1.0, 0.0, "k.").add(&q(1.0, 0.0, "m")),
+        Err(Error::DimensionMismatch { .. })
+    ));
+}
+
+#[test]
+fn a_scale_multiplies_into_the_value() {
+    // 2k. * 3m is 6000m; the scale does not stay in the unit.
+    let p = q(2.0, 0.1, "k.").mul(&q(3.0, 0.0, "m")).unwrap();
+    assert_q(&p, 6000.0, 300.0, "m");
+    // 3m / 2k. is 0.0015m.
+    let d = q(3.0, 0.0, "m").div(&q(2.0, 0.0, "k.")).unwrap();
+    assert_q(&d, 0.0015, 0.0, "m");
+    // (2k.)^2 is 4e6, a plain number.
+    let sq = q(2.0, 0.0, "k.").pow(2).unwrap();
+    assert!(sq.unit().is_dimensionless() && !sq.unit().is_scale());
+    assert!(close(sq.value(), 4e6));
+    // The square root of 4M. is 2000.
+    let r = q(4.0, 0.0, "M.").root(2).unwrap();
+    assert!(close(r.value(), 2000.0));
+}
+
+#[test]
+fn a_scale_converts_to_other_scales_and_to_one() {
+    let n = q(1.0, 0.1, "M.").convert(&u("k.")).unwrap();
+    assert_q(&n, 1000.0, 100.0, "k.");
+    let plain = q(3.0, 0.0, "k.").convert(&one()).unwrap();
+    assert_eq!(plain.value(), 3000.0);
+    assert!(plain.unit().is_dimensionless());
+    assert!(q(1.0, 0.0, "k.").convert(&u("m")).is_err());
+}
+
+#[test]
+fn the_dimensionless_type_admits_scales_and_cancelled_units() {
+    let reg = siquant::Registry::builtin();
+    let none = reg.quantity_type("Dimensionless").unwrap();
+    assert!(none.admits(&u("k.")));
+    assert!(none.admits(&u("m.m^-1")));
+    assert!(none.admits(&one()));
+    assert!(!none.admits(&u("m")));
+}
+
+#[test]
+fn the_unity_unit_is_not_listed() {
+    let reg = siquant::Registry::builtin();
+    assert!(reg.units().all(|u| !u.symbol.is_empty()));
+}

@@ -8,6 +8,10 @@ fn live(text: &str) -> Result<Unit, Error> {
     Unit::parse(text, Scope::Live)
 }
 
+fn unit(text: &str) -> Unit {
+    live(text).unwrap_or_else(|e| panic!("`{text}`: {e}"))
+}
+
 #[test]
 fn accepts_si_units_in_the_one_notation() {
     for text in [
@@ -76,7 +80,17 @@ fn rejects_everything_else() {
         ("s-1", "trailing-digit exponent"),
         ("m..s", "empty term"),
         (".m", "leading dot"),
-        ("m.", "trailing dot"),
+        ("kg.", "trailing dot after a unit"),
+        ("s.", "trailing dot after a unit"),
+        ("N.", "trailing dot after a unit"),
+        ("k..", "two dots"),
+        (".", "a dot alone"),
+        ("k.m", "a scale in a compound"),
+        ("m.k.", "a scale in a compound"),
+        ("k.^2", "an exponent on a scale"),
+        ("k^2.", "an exponent on a scale"),
+        ("Ki.", "binary prefix, not until Stage 2"),
+        ("x.", "not a prefix"),
         ("m*s", "star"),
         ("m\u{b7}s", "middle dot"),
         ("m\u{22c5}s", "dot operator"),
@@ -99,6 +113,68 @@ fn rejects_everything_else() {
     for (text, why) in cases {
         assert!(live(text).is_err(), "should reject `{text}` ({why})");
     }
+}
+
+#[test]
+fn a_prefix_and_a_dot_is_a_scale() {
+    for (text, factor) in [
+        ("k.", 1e3),
+        ("M.", 1e6),
+        ("G.", 1e9),
+        ("T.", 1e12),
+        ("Q.", 1e30),
+        ("h.", 1e2),
+        ("da.", 10.0),
+        ("d.", 1e-1),
+        ("c.", 1e-2),
+        ("m.", 1e-3),
+        ("μ.", 1e-6),
+        ("\u{b5}.", 1e-6),
+        ("n.", 1e-9),
+        ("q.", 1e-30),
+    ] {
+        let u = unit(text);
+        assert!(u.is_scale() && u.is_dimensionless(), "{text}");
+        assert!(close(u.factor(), factor), "{text}: {}", u.factor());
+        assert_eq!(u.offset(), 0.0);
+        // It prints as the canonical symbol and a dot, and parses back.
+        let shown = u.to_string();
+        assert_eq!(unit(&shown), u, "{text} -> {shown}");
+    }
+    assert_eq!(unit("\u{b5}.").to_string(), "μ.");
+    assert_eq!(unit("k.").to_string(), "k.");
+}
+
+#[test]
+fn the_dot_makes_it_a_prefix_so_m_and_t_do_not_clash() {
+    // `m` and `T` are units; `m.` and `T.` are scales.
+    assert!(!unit("m").is_scale());
+    assert!(!unit("T").is_scale());
+    assert!(unit("m.").is_scale());
+    assert!(unit("T.").is_scale());
+    assert_eq!(unit("m").dims(), siquant::Dim::of(siquant::Base::Length));
+    assert_eq!(unit("m.").dims(), siquant::Dim::NONE);
+    assert!(close(unit("T.").factor(), 1e12));
+}
+
+#[test]
+fn a_scale_is_not_part_of_a_compound() {
+    let k = unit("k.");
+    let m = unit("m");
+    assert!(matches!(k.mul(&m), Err(Error::ScaleInCompound(s)) if s == "k."));
+    assert!(matches!(m.div(&k), Err(Error::ScaleInCompound(_))));
+    assert!(matches!(k.pow(2), Err(Error::ScaleInCompound(_))));
+    assert!(matches!(
+        unit("k.").invert(),
+        Err(Error::ScaleInCompound(_))
+    ));
+    // But a scale times a plain number is fine, and so is its own power one.
+    assert!(k.pow(1).is_ok());
+    assert!(k.mul(&Unit::one(k.registry())).is_ok());
+}
+
+fn close(a: f64, b: f64) -> bool {
+    a == b || (a - b).abs() <= 1e-12 * a.abs().max(b.abs())
 }
 
 #[test]

@@ -8,8 +8,15 @@
 //! ```
 //!
 //! `kg.m^2.s^-2`. No spaces, no `/`, no brackets, no superscripts, no
-//! trailing-digit exponents (`m2`), no names or plurals. A symbol is a unit
-//! symbol, or a prefix symbol and a prefixable unit symbol. The exact unit
+//! trailing-digit exponents (`m2`), no names or plurals.
+//!
+//! One more form: a prefix symbol and a `.` on their own, `k.`, is a scale,
+//! a dimensionless number: `1k.` is 1000. The `.` makes it a prefix and
+//! nothing else, so `m.` is milli and `T.` is tera, with no clash with the
+//! metre or the tesla. It is a whole unit: `k.m` and `k.^2` are errors.
+//!
+//! A symbol is a unit symbol, or a prefix symbol and a prefixable unit
+//! symbol. The exact unit
 //! symbol wins over a prefix reading; [`crate::Registry`] refuses at load any
 //! symbol that could be both, so nothing is ever shadowed.
 
@@ -77,6 +84,17 @@ impl Inner {
     pub(crate) fn parse_terms(&self, text: &str, scope: Scope) -> Result<Vec<Term>> {
         if text.is_empty() {
             return syntax(0, "a unit is expected");
+        }
+        // A prefix and a `.` on their own is a scale: `k.` is 1000. The dot
+        // makes it a prefix and nothing else, so `m.` is milli, not the metre.
+        if let Some(body) = text.strip_suffix('.')
+            && let Some(&p) = self.prefix_by_symbol.get(body)
+        {
+            return self.normalise(vec![Term {
+                prefix: Some(p),
+                unit: self.unity,
+                exp: 1,
+            }]);
         }
         let mut terms = Vec::new();
         let mut at = 0;

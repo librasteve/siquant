@@ -22,6 +22,8 @@ pub enum Error {
     },
     /// An affine unit (such as `°C`) was used inside a compound unit.
     AffineInCompound(String),
+    /// A scale (such as `k.`) was used inside a compound unit.
+    ScaleInCompound(String),
     /// The two sides do not measure the same thing.
     DimensionMismatch { left: Dim, right: Dim },
     /// An exponent, dimension or factor is out of range.
@@ -50,6 +52,9 @@ impl fmt::Display for Error {
             }
             Error::AffineInCompound(s) => {
                 write!(f, "`{s}` cannot be part of a compound unit")
+            }
+            Error::ScaleInCompound(s) => {
+                write!(f, "the scale `{s}` cannot be part of a compound unit")
             }
             Error::DimensionMismatch { left, right } => {
                 write!(f, "dimensions differ: {left} and {right}")
