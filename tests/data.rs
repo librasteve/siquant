@@ -102,3 +102,18 @@ fn the_data_types() {
     assert!(rate.admits(&u("MiB.s^-1")));
     assert_eq!(rate.preferred_unit().unwrap().to_string(), "B.s^-1");
 }
+
+#[test]
+fn information_density_is_data_over_area() {
+    let reg = Registry::builtin();
+    let t = reg.quantity_type("InformationDensity").unwrap();
+    assert_eq!(t.preferred_unit().unwrap().to_string(), "b.m^-2");
+    assert_eq!(t.group(), "Data");
+    assert!(t.admits(&u("Gb.m^-2")) && t.admits(&u("TiB.m^-2")));
+    assert!(!t.admits(&u("B.s^-1")));
+    // A disk: 1 TB on 1 cm^2 is 1e12 B over 1e-4 m^2.
+    let per_area = q(1.0, "TB").div(&q(1.0, "cm^2")).unwrap();
+    let got = per_area.convert(&u("b.m^-2")).unwrap().value();
+    assert!(((got - 8e16) / 8e16).abs() < 1e-12, "{got}");
+    assert_eq!(per_area.unit().dims(), t.dims());
+}
