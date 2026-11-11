@@ -1,0 +1,57 @@
+# Named quantity types. A type is only a name for a dimension vector (written
+# with base-dimension names); `Length` is a `Quantity` whose unit has exactly
+# that dimension. Several names may share one dimension (Energy/Torque,
+# Frequency/Radioactivity, Dose/SpecificEnergy): nothing is inferred from a
+# dimension at run time, the column's declared type decides.
+#
+# `unit` is an optional preferred display unit, in cell-text notation.
+#
+# Types for angles, data and time arrive with the stages that add those
+# dimensions.
+
+- {name: Dimensionless,     dims: {}}
+
+- {name: Length,            dims: {Length: 1},             unit: m}
+- {name: Mass,              dims: {Mass: 1},               unit: kg}
+- {name: Current,           dims: {Current: 1},            unit: A}
+- {name: Temperature,       dims: {Temperature: 1},        unit: K}
+- {name: AmountOfSubstance, dims: {Amount: 1},             unit: mol}
+- {name: LuminousIntensity, dims: {LuminousIntensity: 1},  unit: cd}
+
+- {name: Area,              dims: {Length: 2},             unit: "m^2"}
+- {name: Volume,            dims: {Length: 3},             unit: "m^3"}
+- {name: Speed,             dims: {Length: 1, Time: -1},   unit: "m.s^-1"}
+- {name: Acceleration,      dims: {Length: 1, Time: -2},   unit: "m.s^-2"}
+- {name: Flow,              dims: {Length: 3, Time: -1},   unit: "m^3.s^-1"}
+- {name: Frequency,         dims: {Time: -1},              unit: Hz}
+- {name: Radioactivity,     dims: {Time: -1},              unit: Bq}
+- {name: Density,           dims: {Mass: 1, Length: -3},   unit: "kg.m^-3"}
+- {name: ArealDensity,      dims: {Mass: 1, Length: -2},   unit: "kg.m^-2"}
+- {name: Momentum,          dims: {Mass: 1, Length: 1, Time: -1}, unit: "kg.m.s^-1"}
+- {name: Impulse,           dims: {Mass: 1, Length: 1, Time: -1}, unit: "N.s"}
+- {name: MomentOfInertia,   dims: {Mass: 1, Length: 2},    unit: "kg.m^2"}
+- {name: AngularMomentum,   dims: {Mass: 1, Length: 2, Time: -1}, unit: "kg.m^2.s^-1"}
+
+- {name: Force,             dims: {Mass: 1, Length: 1, Time: -2},  unit: N}
+- {name: Pressure,          dims: {Mass: 1, Length: -1, Time: -2}, unit: Pa}
+- {name: Energy,            dims: {Mass: 1, Length: 2, Time: -2},  unit: J}
+- {name: Torque,            dims: {Mass: 1, Length: 2, Time: -2},  unit: "N.m"}
+- {name: Power,             dims: {Mass: 1, Length: 2, Time: -3},  unit: W}
+- {name: Irradiance,        dims: {Mass: 1, Time: -3},             unit: "W.m^-2"}
+
+- {name: Charge,            dims: {Current: 1, Time: 1},                              unit: C}
+- {name: Potential,         dims: {Mass: 1, Length: 2, Time: -3, Current: -1},        unit: V}
+- {name: Resistance,        dims: {Mass: 1, Length: 2, Time: -3, Current: -2},        unit: Ω}
+- {name: Conductance,       dims: {Mass: -1, Length: -2, Time: 3, Current: 2},        unit: S}
+- {name: Capacitance,       dims: {Mass: -1, Length: -2, Time: 4, Current: 2},        unit: F}
+- {name: Inductance,        dims: {Mass: 1, Length: 2, Time: -2, Current: -2},        unit: H}
+- {name: MagneticField,     dims: {Mass: 1, Time: -2, Current: -1},                   unit: T}
+- {name: MagneticFlux,      dims: {Mass: 1, Length: 2, Time: -2, Current: -1},        unit: Wb}
+
+- {name: Dose,              dims: {Length: 2, Time: -2},   unit: Gy}
+- {name: SpecificEnergy,    dims: {Length: 2, Time: -2},   unit: "J.kg^-1"}
+- {name: SpecificPower,     dims: {Length: 2, Time: -3},   unit: "W.kg^-1"}
+- {name: SpecificHeat,      dims: {Length: 2, Time: -2, Temperature: -1}, unit: "J.kg^-1.K^-1"}
+- {name: ThermalConductance, dims: {Mass: 1, Length: 2, Time: -3, Temperature: -1}, unit: "W.K^-1"}
+- {name: ThermalResistance, dims: {Mass: -1, Length: -2, Time: 3, Temperature: 1}, unit: "K.W^-1"}
+- {name: CatalyticActivity, dims: {Amount: 1, Time: -1},   unit: kat}

@@ -1,0 +1,30 @@
+# SI prefixes. A prefix is `base`^`exp`; the scale is built from that integer
+# exponent, never from a long literal. `alt` lists typographic alternates that
+# parse the same (the canonical symbol is the one printed).
+#
+# Stage 2 adds the binary prefixes here as `base: 2`.
+
+- {symbol: Q,  name: quetta, base: 10, exp: 30}
+- {symbol: R,  name: ronna,  base: 10, exp: 27}
+- {symbol: Y,  name: yotta,  base: 10, exp: 24}
+- {symbol: Z,  name: zetta,  base: 10, exp: 21}
+- {symbol: E,  name: exa,    base: 10, exp: 18}
+- {symbol: P,  name: peta,   base: 10, exp: 15}
+- {symbol: T,  name: tera,   base: 10, exp: 12}
+- {symbol: G,  name: giga,   base: 10, exp: 9}
+- {symbol: M,  name: mega,   base: 10, exp: 6}
+- {symbol: k,  name: kilo,   base: 10, exp: 3}
+- {symbol: h,  name: hecto,  base: 10, exp: 2}
+- {symbol: da, name: deca,   base: 10, exp: 1}
+- {symbol: d,  name: deci,   base: 10, exp: -1}
+- {symbol: c,  name: centi,  base: 10, exp: -2}
+- {symbol: m,  name: milli,  base: 10, exp: -3}
+- {symbol: μ,  name: micro,  base: 10, exp: -6, alt: ["µ"]}
+- {symbol: n,  name: nano,   base: 10, exp: -9}
+- {symbol: p,  name: pico,   base: 10, exp: -12}
+- {symbol: f,  name: femto,  base: 10, exp: -15}
+- {symbol: a,  name: atto,   base: 10, exp: -18}
+- {symbol: z,  name: zepto,  base: 10, exp: -21}
+- {symbol: y,  name: yocto,  base: 10, exp: -24}
+- {symbol: r,  name: ronto,  base: 10, exp: -27}
+- {symbol: q,  name: quecto, base: 10, exp: -30}
