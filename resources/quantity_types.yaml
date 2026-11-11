@@ -5,7 +5,7 @@
 # dimension at run time, the column's declared type decides.
 #
 # `unit` is an optional preferred display unit, in cell-text notation.
-# `group` is the heading a menu files the type under: SI Base, Dimensional,
+# `group` is the heading a menu files the type under: SI Base, Data, Size,
 # Mechanical, Electromagnetic, Thermodynamic, Radiation or Other (the default).
 #
 # Types for angles and time arrive with the stages that add those dimensions.
@@ -19,12 +19,12 @@
 - {name: AmountOfSubstance, dims: {Amount: 1},             unit: mol, group: SI Base}
 - {name: LuminousIntensity, dims: {LuminousIntensity: 1},  unit: cd, group: SI Base}
 
-- {name: Area,              dims: {Length: 2},             unit: "m^2", group: Dimensional}
-- {name: Volume,            dims: {Length: 3},             unit: "m^3", group: Dimensional}
-- {name: Speed,             dims: {Length: 1, Time: -1},   unit: "m.s^-1", group: Dimensional}
-- {name: Acceleration,      dims: {Length: 1, Time: -2},   unit: "m.s^-2", group: Dimensional}
-- {name: Flow,              dims: {Length: 3, Time: -1},   unit: "m^3.s^-1", group: Dimensional}
-- {name: Frequency,         dims: {Time: -1},              unit: Hz, group: Dimensional}
+- {name: Area,              dims: {Length: 2},             unit: "m^2", group: Size}
+- {name: Volume,            dims: {Length: 3},             unit: "m^3", group: Size}
+- {name: Speed,             dims: {Length: 1, Time: -1},   unit: "m.s^-1", group: Size}
+- {name: Acceleration,      dims: {Length: 1, Time: -2},   unit: "m.s^-2", group: Size}
+- {name: Flow,              dims: {Length: 3, Time: -1},   unit: "m^3.s^-1", group: Size}
+- {name: Frequency,         dims: {Time: -1},              unit: Hz, group: Size}
 - {name: Radioactivity,     dims: {Time: -1},              unit: Bq, group: Radiation}
 - {name: Density,           dims: {Mass: 1, Length: -3},   unit: "kg.m^-3", group: Mechanical}
 - {name: ArealDensity,      dims: {Mass: 1, Length: -2},   unit: "kg.m^-2", group: Mechanical}

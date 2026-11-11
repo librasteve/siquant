@@ -20,7 +20,7 @@
 # so `kg` is just `k` + `g` with no special case.
 
 # SI base units.
-- {symbol: g,   name: gram,     base: Mass,              factor: "0.001", prefixable: si, group: Dimensional}
+- {symbol: g,   name: gram,     base: Mass,              factor: "0.001", prefixable: si, group: Size}
 - {symbol: m,   name: metre,    base: Length,            prefixable: si}
 - {symbol: A,   name: ampere,   base: Current,           prefixable: si}
 - {symbol: K,   name: kelvin,   base: Temperature,       prefixable: si}
@@ -30,10 +30,10 @@
 
 # Celsius is affine: kelvin = (celsius + 273.15). Not prefixable, and legal
 # only on its own (never inside a compound unit).
-- {symbol: "°C", name: degree Celsius, defn: K, offset: "273.15", alt: ["ºC"], group: Dimensional}
+- {symbol: "°C", name: degree Celsius, defn: K, offset: "273.15", alt: ["ºC"], group: Size}
 
 # SI named derived units (those that need no angle; rad, sr, lm, lx are Stage 3).
-- {symbol: Hz,  name: hertz,     defn: "s^-1",                prefixable: si, group: Dimensional}
+- {symbol: Hz,  name: hertz,     defn: "s^-1",                prefixable: si, group: Size}
 - {symbol: N,   name: newton,    defn: "kg.m.s^-2",           prefixable: si, group: Mechanical}
 - {symbol: Pa,  name: pascal,    defn: "kg.m^-1.s^-2",        prefixable: si, group: Mechanical}
 - {symbol: J,   name: joule,     defn: "kg.m^2.s^-2",         prefixable: si, group: Mechanical}

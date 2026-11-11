@@ -390,7 +390,7 @@ fn types_and_units_are_grouped_for_menus() {
     let reg = Registry::builtin();
     let group = |n: &str| reg.quantity_type(n).unwrap().group().to_string();
     assert_eq!(group("Mass"), "SI Base");
-    assert_eq!(group("Area"), "Dimensional");
+    assert_eq!(group("Area"), "Size");
     assert_eq!(group("Force"), "Mechanical");
     assert_eq!(group("Resistance"), "Electromagnetic");
     assert_eq!(group("SpecificHeat"), "Thermodynamic");
@@ -404,13 +404,13 @@ fn types_and_units_are_grouped_for_menus() {
             .to_string()
     };
     // The gram is not an SI base unit: the kilogram is, which is `Mass`'s.
-    assert_eq!(unit("g"), "Dimensional");
+    assert_eq!(unit("g"), "Size");
     assert_eq!(unit("m"), "SI Base");
     assert_eq!(unit("N"), "Mechanical");
-    assert_eq!(unit("°C"), "Dimensional");
+    assert_eq!(unit("°C"), "Size");
     let order: Vec<&str> = reg
         .units()
-        .filter(|u| u.group == "Dimensional")
+        .filter(|u| u.group == "Size")
         .map(|u| u.symbol)
         .collect();
     assert_eq!(order, ["g", "°C", "Hz"]);

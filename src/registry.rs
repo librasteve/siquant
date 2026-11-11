@@ -57,12 +57,12 @@ pub enum Prefixable {
 /// last.
 pub const GROUPS: [&str; 8] = [
     "SI Base",
-    "Dimensional",
+    "Data",
+    "Size",
     "Mechanical",
     "Electromagnetic",
     "Thermodynamic",
     "Radiation",
-    "Data",
     "Other",
 ];
 
