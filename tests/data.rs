@@ -93,7 +93,7 @@ fn a_binary_scale_is_a_power_of_two() {
 #[test]
 fn the_data_types() {
     let reg = Registry::builtin();
-    let info = reg.quantity_type("Information").unwrap();
+    let info = reg.quantity_type("Data").unwrap();
     assert!(info.admits(&u("MiB")) && info.admits(&u("kb")));
     assert!(!info.admits(&u("m")));
     assert_eq!(info.preferred_unit().unwrap().to_string(), "B");
@@ -106,7 +106,7 @@ fn the_data_types() {
 #[test]
 fn information_density_is_data_over_area() {
     let reg = Registry::builtin();
-    let t = reg.quantity_type("InformationDensity").unwrap();
+    let t = reg.quantity_type("DataDensity").unwrap();
     assert_eq!(t.preferred_unit().unwrap().to_string(), "b.m^-2");
     assert_eq!(t.group(), "Data");
     assert!(t.admits(&u("Gb.m^-2")) && t.admits(&u("TiB.m^-2")));
