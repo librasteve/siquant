@@ -32,7 +32,7 @@
 # only on its own (never inside a compound unit).
 - {symbol: "°C", name: degree Celsius, defn: K, offset: "273.15", alt: ["ºC"], group: Size}
 
-# SI named derived units (those that need no angle; rad, sr, lm, lx are Stage 3).
+# SI named derived units.
 - {symbol: Hz,  name: hertz,     defn: "s^-1",                prefixable: si, group: Size}
 - {symbol: N,   name: newton,    defn: "kg.m.s^-2",           prefixable: si, group: Mechanical}
 - {symbol: Pa,  name: pascal,    defn: "kg.m^-1.s^-2",        prefixable: si, group: Mechanical}
@@ -56,3 +56,19 @@
 # 1024 B); rates need no entry of their own: `kb.s^-1`, `MiB.s^-1`.
 - {symbol: b, name: bit,  base: Data, prefixable: both, group: Data}
 - {symbol: B, name: byte, defn: b, factor: "8", prefixable: both, group: Data}
+
+# Angles (Stage 3). The radian is the base unit of the angle dimension, so a
+# frequency (`s^-1`) and an angular speed (`rad.s^-1`) are not the same thing,
+# and the steradian is a radian squared. The degree, the minute of arc and the
+# second of arc are non-SI units the SI accepts; they are live so that `45°`
+# can be written, and cannot take a prefix. `'` and `"` are the ASCII
+# alternates of `′` and `″`, and `º` of `°`.
+- {symbol: rad, name: radian,    base: Angle, prefixable: si, group: Angle}
+- {symbol: sr,  name: steradian, defn: "rad^2", prefixable: si, group: Angle}
+- {symbol: "°", name: degree,    defn: rad, factor: "0.017453292519943295", alt: ["º"], group: Angle}
+- {symbol: "′", name: arcminute, defn: "°", factor: "0.016666666666666666", alt: ["'"], group: Angle}
+- {symbol: "″", name: arcsecond, defn: "′", factor: "0.016666666666666666", alt: ['"'], group: Angle}
+
+# Light (Stage 3): the lumen and the lux need the steradian.
+- {symbol: lm,  name: lumen,     defn: "cd.sr",    prefixable: si, group: Light}
+- {symbol: lx,  name: lux,       defn: "cd.sr.m^-2", prefixable: si, group: Light}

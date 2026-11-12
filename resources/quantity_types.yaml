@@ -8,7 +8,7 @@
 # `group` is the heading a menu files the type under: SI Base, Data, Size,
 # Mechanical, Electromagnetic, Thermodynamic, Radiation or Other (the default).
 #
-# Types for angles and time arrive with the stages that add those dimensions.
+# Types for time arrive with the stage that adds it.
 
 - {name: Dimensionless,     dims: {}, group: Other}
 
@@ -60,3 +60,9 @@
 - {name: Data, dims: {Data: 1},             unit: B, group: Data}
 - {name: DataRate,    dims: {Data: 1, Time: -1},   unit: "b.s^-1", group: Data}
 - {name: DataDensity, dims: {Data: 1, Length: -2}, unit: "b.m^-2", group: Data}
+
+- {name: Angle,             dims: {Angle: 1},                          unit: rad, group: Angle}
+- {name: SolidAngle,        dims: {Angle: 2},                          unit: sr, group: Angle}
+- {name: AngularSpeed,      dims: {Angle: 1, Time: -1},                unit: "rad.s^-1", group: Angle}
+- {name: LuminousFlux,      dims: {LuminousIntensity: 1, Angle: 2},    unit: lm, group: Light}
+- {name: Illuminance,       dims: {LuminousIntensity: 1, Angle: 2, Length: -2}, unit: lx, group: Light}

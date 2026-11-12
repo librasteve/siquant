@@ -57,8 +57,8 @@ New standalone repo and crate `siquant` at `measures/siquant` (name free on crat
 ### Stage 2 — data prefixes (done)
 Activate `D`. Add `b` (bit) and `B` (byte = 8 b) to the live set with `prefixable: both`; add binary prefixes Ki Mi Gi Ti Pi Ei Zi Yi Ri Qi to `prefixes.yaml` as `{base: 2, exp: 10n}` (schema unchanged). `kB` = 1000 B and `KiB` = 1024 B coexist; rates (`kb.s^-1`, `MiB.s^-1`) fall out with no hand-listed `kbps` entries. Extend the ambiguity validator to the binary prefixes (case-sensitive). Add `Data`/`DataRate` quantity types.
 
-### Stage 3 — Angles
-Activate `A`. Add rad, sr, lm (cd.sr), lx to the live set; define `°` (and ′ ″) as units with factor pi/180 etc. Add the DMS entry form `45°30′30″` for Angle columns, accepting alternates `º`, `'`, `"` and a leading minus; the numeric parts follow Scientific/decimal rules (detail to settle in that stage). Add `Angle`, `SolidAngle`, `AngularSpeed`, `LuminousFlux`, `Illuminance` types.
+### Stage 3 — Angles (siquant done)
+Activate `A`. Add rad, sr, lm (cd.sr), lx to the live set; define `°` (and ′ ″) as units with factor pi/180 etc. Add the DMS entry form `45°30′30″` for Angle columns, accepting alternates `º`, `'`, `"` and a leading minus; the numeric parts are plain decimals in siquant (`Quantity::from_dms` / `to_dms`, minutes and seconds under 60, only the last part may have a point), and the host reads any uncertainty. `rad` is the base unit of `A`, `sr` is `rad^2`, `°` `′` `″` are live and not prefixable, and the new menu groups are `Angle` and `Light`. The omasheet lexer, `Angle` columns and trig functions are the next increment. Add `Angle`, `SolidAngle`, `AngularSpeed`, `LuminousFlux`, `Illuminance` types.
 
 ### Stage 4 — Time
 Add the `Duration` quantity type (dims `T`, a refinement of Quantity like any other) and make it transparently interchangeable with omasheet's `Duration` (`Value::Duration(i64)` microseconds, ISO 8601 `PT1H30M`, `omasheet-omx/src/duration.rs`).

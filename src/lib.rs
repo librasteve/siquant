@@ -14,10 +14,11 @@
 //! `k.`, for a dimensionless scale (`1k.` is 1000). The crate does not read
 //! the number in front of a unit; the host splits a cell into number and unit.
 //!
-//! The staged plan is in `docs/plan.md`: this is Stage 1 (SI units and SI
-//! prefixes), with data prefixes, angles and durations to follow.
+//! The staged plan is in `docs/plan.md`: this is Stages 1 to 3 (SI units and SI
+//! prefixes, data prefixes and angles), with durations to follow.
 
 mod dim;
+mod dms;
 mod error;
 mod parse;
 mod quantity;
