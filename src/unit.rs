@@ -208,12 +208,18 @@ impl Unit {
 }
 
 /// A converted number to the 15 significant digits a float holds for sure,
-/// so that `2g` in `mg` is `2000` and not `2000.0000000000002`.
+/// so that `2g` in `mg` is `2000` and not `2000.0000000000002`. It is done
+/// only where that moves the number by no more than a few of the last places,
+/// which is the noise of the sum: a number that is not near a 15-digit one,
+/// such as `90°` in radians, keeps all its digits.
 fn tidy(x: f64) -> f64 {
     if x == 0.0 || !x.is_finite() {
         return x;
     }
-    format!("{x:.14e}").parse().unwrap_or(x)
+    match format!("{x:.14e}").parse::<f64>() {
+        Ok(r) if (r - x).abs() <= 4.0 * f64::EPSILON * x.abs() => r,
+        _ => x,
+    }
 }
 
 impl PartialEq for Unit {

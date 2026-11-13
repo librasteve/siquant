@@ -183,3 +183,18 @@ fn a_quantity_in_its_own_unit_is_not_rounded() {
     assert_eq!(a.convert(&u("°")).unwrap().value(), a.value());
     assert_eq!(a.sub(&a).unwrap().value(), 0.0);
 }
+
+#[test]
+fn a_conversion_keeps_the_digits_it_has() {
+    // 90° is 1.5707963267948966 rad: rounded to 15 digits it would be off by 3e-15.
+    let half_pi = q(90.0, "°").convert(&u("rad")).unwrap().value();
+    assert_eq!(half_pi, std::f64::consts::FRAC_PI_2);
+    let back = q(half_pi, "rad").convert(&u("°")).unwrap().value();
+    assert!((back - 90.0).abs() < 1e-13, "{back}");
+    // And the noise of a sum is still cleaned up.
+    assert_eq!(to_value(2.0, "g", "mg"), 2000.0);
+}
+
+fn to_value(value: f64, from: &str, into: &str) -> f64 {
+    q(value, from).convert(&u(into)).unwrap().value()
+}
