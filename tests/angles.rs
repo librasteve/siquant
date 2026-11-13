@@ -175,3 +175,11 @@ fn angles_add_and_compare_across_units() {
         .unwrap();
     assert!(near(a.value(), 0.5) && near(a.sigma(), 0.5 / 60.0));
 }
+
+#[test]
+fn a_quantity_in_its_own_unit_is_not_rounded() {
+    // 16 digits are kept when the unit does not change.
+    let a = Quantity::from_dms("45°30′30″").unwrap();
+    assert_eq!(a.convert(&u("°")).unwrap().value(), a.value());
+    assert_eq!(a.sub(&a).unwrap().value(), 0.0);
+}

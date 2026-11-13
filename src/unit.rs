@@ -183,6 +183,10 @@ impl Unit {
                 right: to.dims,
             });
         }
+        // The same unit is the same number, with no rounding to 15 digits.
+        if self == to {
+            return Ok(value);
+        }
         Ok(tidy(
             (value + self.offset) * self.factor / to.factor - to.offset,
         ))
@@ -195,6 +199,9 @@ impl Unit {
                 left: self.dims,
                 right: to.dims,
             });
+        }
+        if self == to {
+            return Ok(1.0);
         }
         Ok(tidy(self.factor / to.factor))
     }
