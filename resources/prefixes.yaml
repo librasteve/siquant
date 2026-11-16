@@ -20,7 +20,7 @@
 - {symbol: d,  name: deci,   base: 10, exp: -1}
 - {symbol: c,  name: centi,  base: 10, exp: -2}
 - {symbol: m,  name: milli,  base: 10, exp: -3}
-- {symbol: μ,  name: micro,  base: 10, exp: -6, alt: ["µ"]}
+- {symbol: μ,  name: micro,  base: 10, exp: -6, alt: ["µ", "u"]}
 - {symbol: n,  name: nano,   base: 10, exp: -9}
 - {symbol: p,  name: pico,   base: 10, exp: -12}
 - {symbol: f,  name: femto,  base: 10, exp: -15}

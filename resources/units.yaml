@@ -72,3 +72,15 @@
 # Light (Stage 3): the lumen and the lux need the steradian.
 - {symbol: lm,  name: lumen,     defn: "cd.sr",    prefixable: si, group: Light}
 - {symbol: lx,  name: lux,       defn: "cd.sr.m^-2", prefixable: si, group: Light}
+
+# Non-SI units for the metric stage (omasheet): each an exact multiple of an
+# SI unit, none of the imperial ones. `L` is the other spelling of the litre.
+# `Da` is the dalton (CODATA 2022: 1.66053906892e-27 kg).
+- {symbol: l,   name: litre,            defn: "m^3", factor: "0.001",     alt: ["L"], prefixable: si, group: Size}
+- {symbol: t,   name: tonne,            defn: g,      factor: "1000000", group: Size}
+- {symbol: ha,  name: hectare,          defn: "m^2", factor: "10000",                  group: Size}
+- {symbol: bar, name: bar,              defn: Pa,     factor: "100000",                prefixable: si, group: Mechanical}
+- {symbol: eV,  name: electronvolt,     defn: J,      factor: "1.602176634e-19",       prefixable: si, group: Mechanical}
+- {symbol: cal, name: calorie,          defn: J,      factor: "4.184",                 prefixable: si, group: Mechanical}
+- {symbol: Wh,  name: watt-hour,        defn: J,      factor: "3600",                  prefixable: si, group: Mechanical}
+- {symbol: Da,  name: dalton,           defn: g,      factor: "1.66053906892e-24",     prefixable: si, group: Size}
