@@ -57,6 +57,8 @@
 - {name: SpecificHeat,      dims: {Length: 2, Time: -2, Temperature: -1}, unit: "J.kg^-1.K^-1"}
 - {name: ThermalConductance, dims: {Mass: 1, Length: 2, Time: -3, Temperature: -1}, unit: "W.K^-1"}
 - {name: ThermalResistance, dims: {Mass: -1, Length: -2, Time: 3, Temperature: 1}, unit: "K.W^-1"}
+- {name: ThermalInsulance,  dims: {Mass: -1, Time: 3, Temperature: 1}, unit: tog}
+- {name: RadiationExposure, dims: {Current: 1, Time: 1, Mass: -1}, unit: R}
 - {name: CatalyticActivity, dims: {Amount: 1, Time: -1},   unit: kat}
 
 - {name: Data, dims: {Data: 1},             unit: B}
