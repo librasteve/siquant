@@ -1,0 +1,2 @@
+# Currency codes that clash with a unit symbol (or a prefix and a unit), found by loading.
+GT
