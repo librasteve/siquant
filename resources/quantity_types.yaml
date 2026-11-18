@@ -8,12 +8,14 @@
 # `group` is the heading a menu files the type under: SI Base, Data, Size,
 # Mechanical, Electromagnetic, Thermodynamic, Radiation or Other (the default).
 #
-# Types for time arrive with the stage that adds it.
+# `Duration` is the type for time: a `Quantity` whose unit is of the dimension
+# of time, `s` unless the column says another (add-duration-kind).
 
 - {name: Dimensionless,     dims: {}, group: Other}
 
 - {name: Length,            dims: {Length: 1},             unit: m, group: SI Base}
 - {name: Mass,              dims: {Mass: 1},               unit: kg, group: SI Base}
+- {name: Duration,          dims: {Time: 1},               unit: s, group: SI Base}
 - {name: Current,           dims: {Current: 1},            unit: A, group: SI Base}
 - {name: Temperature,       dims: {Temperature: 1},        unit: K, group: SI Base}
 - {name: AmountOfSubstance, dims: {Amount: 1},             unit: mol, group: SI Base}
@@ -64,5 +66,5 @@
 - {name: Angle,             dims: {Angle: 1},                          unit: rad, group: Angle}
 - {name: SolidAngle,        dims: {Angle: 2},                          unit: sr, group: Angle}
 - {name: AngularSpeed,      dims: {Angle: 1, Time: -1},                unit: "rad.s^-1", group: Angle}
-- {name: LuminousFlux,      dims: {LuminousIntensity: 1, Angle: 2},    unit: lm, group: Light}
-- {name: Illuminance,       dims: {LuminousIntensity: 1, Angle: 2, Length: -2}, unit: lx, group: Light}
+- {name: LuminousFlux,      dims: {LuminousIntensity: 1, Angle: 2},    unit: lm, group: Radiation}
+- {name: Illuminance,       dims: {LuminousIntensity: 1, Angle: 2, Length: -2}, unit: lx, group: Radiation}

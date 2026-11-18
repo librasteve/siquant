@@ -413,16 +413,20 @@ fn types_and_units_are_grouped_for_menus() {
         .filter(|u| u.group == "Size")
         .map(|u| u.symbol)
         .collect();
-    assert_eq!(order, ["g", "°C", "Hz", "l", "t", "ha", "Da"]);
+    assert_eq!(
+        order,
+        ["g", "°C", "Hz", "l", "t", "ha", "min", "h", "d", "wk", "Da"]
+    );
     // Every group named is one of the headings.
     assert!(reg.quantity_types().all(|t| GROUPS.contains(&t.group())));
     assert!(reg.units().all(|u| GROUPS.contains(&u.group)));
-    // The base types are the six with a base unit of their own here.
+    // The base types are the seven with a base unit of their own, `Duration`
+    // being the one for time.
     assert_eq!(
         reg.quantity_types()
             .filter(|t| t.group() == "SI Base")
             .count(),
-        6
+        7
     );
 }
 
@@ -431,4 +435,26 @@ fn the_katal_is_filed_under_thermodynamic() {
     let reg = siquant::Registry::builtin();
     let kat = reg.units().find(|u| u.symbol == "kat").unwrap();
     assert_eq!(kat.group, "Thermodynamic");
+}
+
+#[test]
+fn a_dimension_with_several_types_is_inferred_as_the_fixed_one() {
+    use siquant::{Registry, Scope, Unit};
+    let reg = Registry::builtin();
+    let of = |unit: &str| {
+        let u = Unit::parse(unit, Scope::Live).unwrap();
+        reg.infer_type(u.dims()).map(|t| t.name().to_string())
+    };
+    // One type with the dimension: that one.
+    assert_eq!(of("m.s^-1").as_deref(), Some("Speed"));
+    assert_eq!(of("s").as_deref(), Some("Duration"));
+    // Several: the fixed one, whichever the resource file lists first.
+    assert_eq!(of("J").as_deref(), Some("Energy"));
+    assert_eq!(of("N.m").as_deref(), Some("Energy"));
+    assert_eq!(of("Hz").as_deref(), Some("Frequency"));
+    assert_eq!(of("kg.m.s^-1").as_deref(), Some("Momentum"));
+    assert_eq!(of("J.kg^-1").as_deref(), Some("SpecificEnergy"));
+    assert_eq!(of("m^2").as_deref(), Some("Area"));
+    // None: a plain quantity.
+    assert_eq!(of("kg.m^5"), None);
 }
