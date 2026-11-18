@@ -93,3 +93,6 @@ After each stage: `cargo fmt --all --check && cargo clippy --workspace --all-tar
 2b. Stage 3 adds the angle `°`; `20°C` vs `45°` is resolved by longest match, so no conflict.
 3. New standalone repo/crate `measures/siquant`, not inside the omasheet workspace.
 4. The crate takes pre-split number/unit text from the host and never scans numbers itself.
+
+### The menu (done, 0.2.0)
+Where a unit or a quantity type is filed in a picker used to be a `group:` field on each row of the yaml, with the order inside a group left to code. Both now live in one file, `resources/menu.txt`: `== Heading` lines in order, and under each the units in order, one a line (`N.m`, `kg.m^-3`; anything after ` | ` is a note). A type is filed under the heading of its preferred unit, a type with no unit under `Other`. The registry checks at load that every live unit and every preferred unit is listed, once, and that each line is a unit, so a new unit cannot be forgotten. `GROUPS` is replaced by `Registry::groups()` and `Registry::menu()`, and `Registry::from_yaml_with_menu` takes the menu (`from_yaml` files everything under `Other`). This is a breaking change, hence 0.2.0. `rpm` (2 pi / 60 rad.s^-1) was added with it.
