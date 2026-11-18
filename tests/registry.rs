@@ -536,7 +536,7 @@ fn the_non_metric_units_have_their_values() {
     assert!(near(to(1.0, "lb", "g"), 453.592_37));
     assert!(near(to(1.0, "ton", "kg"), 907.184_74));
     assert!(near(to(1.0, "gal", "l"), 3.785_411_784));
-    assert!(near(to(1.0, "ac", "m^2"), 4046.856_422_4));
+    assert!(near(to(1.0, "ac", "m^2"), 4_046.856_422_4));
     assert!(near(to(1.0, "ft^2", "m^2"), 0.092_903_04));
     assert!(near(to(1.0, "psi", "Pa"), 6894.757_293_168_361));
     assert!(near(to(1.0, "hp", "W"), 745.699_871_582_270_2));
