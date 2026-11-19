@@ -11,7 +11,7 @@ Error/uncertainty (Raku `Physics::Error`), Currency, Constants and Navigation ar
 ## Scope rules (from the user)
 
 - **Cell text is tightly controlled.** Live in cells: `XX` immediately followed by an SI unit, e.g. `5kg`, `300cm`, `9.81m.s^-2`. `XX` is exactly an omasheet Scientific literal (so `10.5(3)e-3kg` carries uncertainty). Magnitude is `f64` + sigma; no exact-Decimal path (`5m + 300cm = 8m` holds in f64 anyway).
-- **Compound notation is only** `kg.m^2.s^-2`: `.` separator, `^` with a signed integer exponent, no spaces, no `/`, no parentheses, no superscripts, no trailing-digit exponents (`m2`), no names/plurals/aliases.
+- **Compound notation is only** `kg.m^2.s^-2`: `.` separator, `^` with a signed integer exponent, no spaces, no `/`, no parentheses, no trailing-digit exponents (`m2`), no names/plurals/aliases. The SI recommended form, `m⋅s⁻¹` (the dot operator and superscript exponents), is read as the same unit, and always printed as `m.s^-1`; a host shows it as it likes (0.3.1).
 - **Non-SI units are not cell syntax.** They are chosen at column level (unit picker); the column type is the point of definition of the subtype.
 - Angles `45°30′30″` are Stage 3, Time is Stage 4.
 
